@@ -54,32 +54,16 @@ const eventDashboard = [
 ]
 
 class EventDashboard extends Component {
-  constructor(props){
-    super(props);
 
-    this.state = {
-      events : eventDashboard,
-      isOpen : false
-    }
-
-    // Not the preferred way to bind
-    // this.handleFormOpen = this.handleFormOpen.bind(this);
-    // this.handleCancel = this.handleCancel.bind(this); 
+  state = {
+    events : eventDashboard,
+    isOpen : false
   }
-
-  // handleFormOpen(){
-  //   this.setState({isOpen : true});
-  // }
 
   // This is the preferred way to bind the handler method, instead of doing it in the constructor
-  handleFormOpen = (thing) => ()  => {
-    console.log(thing); // This has no bearing to the logic. Just to illustrate passing params 
+  handleFormOpen = ()  => {
     this.setState({isOpen : true});
   }
-
-  // handleCancel(){
-  //   this.setState({isOpen : false});
-  // }
 
   handleCancel = () => {
     this.setState({isOpen : false});
@@ -91,7 +75,7 @@ class EventDashboard extends Component {
             <EventList events = {this.state.events}/>
          </Grid.Column>
          <Grid.Column width={6}> 
-            <Button positive content="Create Event" onClick={this.handleFormOpen("Pass something")}/>
+            <Button positive content="Create Event" onClick={this.handleFormOpen}/>
             {this.state.isOpen && <EventForm handleCancel={this.handleCancel}/>}            
          </Grid.Column>
      </Grid>
