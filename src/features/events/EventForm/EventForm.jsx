@@ -29,7 +29,7 @@ class EventForm extends Component {
             this.setState({
                 event: nextProps.selectedEvent || emptyEvent
             })
-        }
+        } 
     }
 
     onInputChange = (evt) => {
