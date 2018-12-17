@@ -58,12 +58,16 @@ class EventDashboard extends Component {
 
   state = {
     events : eventDashboard,
-    isOpen : false
+    isOpen : false,
+    selectedEvent: null
   }
 
   // This is the preferred way to bind the handler method, instead of doing it in the constructor
   handleFormOpen = ()  => {
-    this.setState({isOpen : true});
+    this.setState({
+      selectedEvent: null,
+      isOpen : true
+    });
   }
 
   handleCancel = () => {
@@ -81,16 +85,26 @@ class EventDashboard extends Component {
     })
   }
 
+  // This syntax is known as currying and is used to defin higher order functions.
+  // Higher order functions return functions.
+  handleEditEvent = (eventToUpdate) => () => {
+    this.setState({
+      selectedEvent: eventToUpdate,
+      isOpen:true
+    })
+  }
 
   render() {
+    const {selectedEvent} = this.state;
     return (
      <Grid>
          <Grid.Column width={10}> 
-            <EventList events = {this.state.events}/>
+            <EventList onEventEdit={this.handleEditEvent} events = {this.state.events}/>
          </Grid.Column>
          <Grid.Column width={6}> 
             <Button positive content="Create Event" onClick={this.handleFormOpen}/>
-            {this.state.isOpen && <EventForm createEvent={this.handleCreateEvent} handleCancel={this.handleCancel}/>}            
+            {this.state.isOpen && 
+            <EventForm selectedEvent={selectedEvent} createEvent={this.handleCreateEvent} handleCancel={this.handleCancel}/>}            
          </Grid.Column>
      </Grid>
     )

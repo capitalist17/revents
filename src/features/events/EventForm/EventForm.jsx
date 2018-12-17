@@ -1,15 +1,26 @@
 import React, { Component } from 'react'
 import { Segment, Form, Button } from 'semantic-ui-react'
+
+const emptyEvent = {
+    title:'',
+    date:'',
+    city:'',
+    venue:'',
+    hostedBy:''
+}
 class EventForm extends Component {
     state = {
-        event: {
-            title:'',
-            date:'',
-            city:'',
-            venue:'',
-            hostedBy:''
+        event: emptyEvent
+    }
+
+    componentDidMount(){
+        if (this.props.selectedEvent !== null){
+            this.setState({
+                event: this.props.selectedEvent
+            })
         }
     }
+
     onInputChange = (evt) => {
         const newEvent = this.state.event;
         newEvent[evt.target.name] = evt.target.value
