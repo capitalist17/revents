@@ -21,6 +21,17 @@ class EventForm extends Component {
         }
     }
 
+    componentWillReceiveProps(nextProps){
+        // Remove the comments below to witness how this method works
+        // console.log('Current: ', this.props.selectedEvent);
+        // console.log('Next: ', nextProps.selectedEvent);
+        if (nextProps.selectedEvent !== this.props.selectedEvent){
+            this.setState({
+                event: nextProps.selectedEvent || emptyEvent
+            })
+        }
+    }
+
     onInputChange = (evt) => {
         const newEvent = this.state.event;
         newEvent[evt.target.name] = evt.target.value
