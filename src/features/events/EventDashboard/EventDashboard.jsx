@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Grid, Button } from 'semantic-ui-react';
+import cuid from 'cuid'; // generates random unique ids 
 import EventList from '../EventList/EventList';
 import EventForm from '../EventForm/EventForm';
 
@@ -68,6 +69,19 @@ class EventDashboard extends Component {
   handleCancel = () => {
     this.setState({isOpen : false});
   }
+
+  handleCreateEvent = (newEvent) => {
+    newEvent.id = cuid();
+    newEvent.hostPhotoURL='/assets/user.png';
+    // ... is the spread operator. It basically expands the existing array and adds the new element to the array
+    const updatedEvents = [...this.state.events, newEvent];
+    this.setState({
+      events: updatedEvents,
+      isOpen: false
+    })
+  }
+
+
   render() {
     return (
      <Grid>
@@ -76,7 +90,7 @@ class EventDashboard extends Component {
          </Grid.Column>
          <Grid.Column width={6}> 
             <Button positive content="Create Event" onClick={this.handleFormOpen}/>
-            {this.state.isOpen && <EventForm handleCancel={this.handleCancel}/>}            
+            {this.state.isOpen && <EventForm createEvent={this.handleCreateEvent} handleCancel={this.handleCancel}/>}            
          </Grid.Column>
      </Grid>
     )

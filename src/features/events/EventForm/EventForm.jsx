@@ -19,7 +19,8 @@ class EventForm extends Component {
     }
     onFormSubmit  = (evt) => {
         evt.preventDefault();
-        console.log(this.state.event);
+        //console.log(this.state.event);
+        this.props.createEvent(this.state.event);
     }
   render() {
     const {handleCancel} = this.props;
