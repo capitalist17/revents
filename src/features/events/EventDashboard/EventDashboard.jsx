@@ -85,11 +85,26 @@ class EventDashboard extends Component {
     })
   }
 
+  handleUpdateEvent = (updatedEvent) => {
+    this.setState({
+      events:this.state.events.map((event) => {
+              if(event.id === updatedEvent.id){
+                // We first set the existing object to null and then assign the updatedEvent. 
+                // As good as saying that we are replacing the existing event with the updatedEvent.
+                return Object.assign({}, updatedEvent); 
+              } else {
+                return event;
+              }
+            }),
+      isOpen: false,
+      selectedEvent:null
+    })
+  }
   // This syntax is known as currying and is used to defin higher order functions.
   // Higher order functions return functions.
-  handleEditEvent = (eventToUpdate) => () => {
+  handleOpenEvent = (eventToOpen) => () => {
     this.setState({
-      selectedEvent: eventToUpdate,
+      selectedEvent: eventToOpen,
       isOpen:true
     })
   }
@@ -99,12 +114,15 @@ class EventDashboard extends Component {
     return (
      <Grid>
          <Grid.Column width={10}> 
-            <EventList onEventEdit={this.handleEditEvent} events = {this.state.events}/>
+            <EventList onEventOpen={this.handleOpenEvent} events = {this.state.events}/>
          </Grid.Column>
          <Grid.Column width={6}> 
             <Button positive content="Create Event" onClick={this.handleFormOpen}/>
             {this.state.isOpen && 
-            <EventForm selectedEvent={selectedEvent} createEvent={this.handleCreateEvent} handleCancel={this.handleCancel}/>}            
+            <EventForm selectedEvent={selectedEvent} 
+                       createEvent={this.handleCreateEvent} 
+                       updateEvent={this.handleUpdateEvent}
+                       handleCancel={this.handleCancel}/>}            
          </Grid.Column>
      </Grid>
     )

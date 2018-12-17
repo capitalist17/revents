@@ -3,14 +3,14 @@ import EventListItem from './EventListItem';
 
 class EventList extends Component {
   render() {
-    const {events, onEventEdit} = this.props;
+    const {events, onEventOpen} = this.props;
     return (
       
 
       <div>
           <h1>Event List</h1>
           {events.map((event) => { 
-                        return <EventListItem key={event.id} event={event} onEventEdit={onEventEdit} /> ;
+                        return <EventListItem key={event.id} event={event} onEventOpen={onEventOpen} /> ;
                       })}
 
           {/* The line below is the short form of the above arrow function 
