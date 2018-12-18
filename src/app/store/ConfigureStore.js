@@ -1,4 +1,5 @@
-import { createStore, applyMiddleware, compose } from 'redux';
+// import { createStore, applyMiddleware, compose } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension'
 import rootReducer from '../reducers/rootReducer';
 
@@ -7,7 +8,7 @@ export const configureStore = (preloadedState) => {
     const middlewareEnhancer = applyMiddleware(...middlewares);
     const storeEnhancer = [middlewareEnhancer];
     // const composedEnhancer = compose(...storeEnhancer);
-    const composedEnhancer = composeWithDevTools(...storeEnhancer);
+    const composedEnhancer = composeWithDevTools(...storeEnhancer); // This can do hot reloading
 
     const store = createStore(rootReducer, preloadedState, composedEnhancer);   
 
