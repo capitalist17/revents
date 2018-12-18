@@ -3,11 +3,11 @@ import { Button } from 'semantic-ui-react'
 import { connect } from 'react-redux'; // using this we can bind this component to the redux store
 import { incrementCounter, decrementCounter } from './testActions'
 
-const mapState = (state) => ({
+const mapStateToProps = (state) => ({
   data: state.test.data
 })
 
-const actions = {
+const mapDispatchToProps = {
   incrementCounter,
   decrementCounter
 }
@@ -26,4 +26,4 @@ class TestComponent extends Component {
   }
 }
 
-export default connect(mapState, actions)(TestComponent)
+export default connect(mapStateToProps, mapDispatchToProps)(TestComponent)

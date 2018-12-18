@@ -1,10 +1,11 @@
 import { INCREMENT_COUNTER, DECREMENT_COUNTER } from './testConstants';
-// import { createReducer } from '../../app/common/util/reducerUtil'
+import { createReducer } from '../../app/common/util/reducerUtil'
 
 const initialState = {
-  data: 45
-};
+  data: 53
+}; 
 
+// if state is not provided then initialState is used
 const testReducer = (state = initialState, action) => {
   switch (action.type) {
     case INCREMENT_COUNTER:
@@ -17,6 +18,8 @@ const testReducer = (state = initialState, action) => {
 };
 
 export default testReducer;
+
+/* ***** Author likes the following method. Personally I prefer the switch method above *****  */
 
 // export const incrementCounter = (state, payload) => {
 //   return { ...state, data: state.data + 1 };
