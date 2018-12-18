@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Button } from 'semantic-ui-react'
-import { connect } from 'react-redux'
+import { connect } from 'react-redux'; // using this we can bind this component to the redux store
 import { incrementCounter, decrementCounter } from './testActions'
 
 const mapState = (state) => ({
