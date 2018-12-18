@@ -4,10 +4,17 @@ import cuid from 'cuid'; // generates random unique ids
 import EventList from '../EventList/EventList';
 import EventForm from '../EventForm/EventForm';
 import { connect } from 'react-redux'; // using this we can bind this component to the redux store
+import { createEvent, updateEvent, deleteEvent } from '../eventActions';
 
 const mapStateToProps = (state) => ({
   events: state.events
 })
+
+const mapDispatchToProps = {
+  createEvent,
+  updateEvent,
+  deleteEvent
+}
 
 class EventDashboard extends Component {
 
@@ -31,26 +38,16 @@ class EventDashboard extends Component {
   handleCreateEvent = (newEvent) => {
     newEvent.id = cuid();
     newEvent.hostPhotoURL='/assets/user.png';
-    // ... is the spread operator. It basically expands the existing array and adds the new element to the array
-    const updatedEvents = [...this.state.events, newEvent];
+    this.props.createEvent(newEvent);
     this.setState({
-      events: updatedEvents,
       isOpen: false,
       selectedEvent: newEvent
     })
   }
 
   handleUpdateEvent = (updatedEvent) => {
+    this.props.updateEvent(updatedEvent);
     this.setState({
-      events:this.state.events.map((event) => {
-              if(event.id === updatedEvent.id){
-                // We first set the existing object to null and then assign the updatedEvent. 
-                // As good as saying that we are replacing the existing event with the updatedEvent.
-                return Object.assign({}, updatedEvent); 
-              } else {
-                return event;
-              }
-            }),
       isOpen: false,
       selectedEvent:null
     })
@@ -65,12 +62,7 @@ class EventDashboard extends Component {
   }
 
   handleDeleteEvent = (eventId) => () => {
-    const updatedEvents = this.state.events.filter(e => e.id !== eventId);
-    
-    this.setState({
-      events : updatedEvents,
-      selectedEvent:null
-    })
+    this.props.deleteEvent(eventId);
   }
 
   render() {
@@ -96,4 +88,4 @@ class EventDashboard extends Component {
   }
 }
 
-export default connect(mapStateToProps)(EventDashboard);
+export default connect(mapStateToProps,mapDispatchToProps)(EventDashboard);
