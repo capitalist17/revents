@@ -1,35 +1,29 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Segment, Form, Button } from 'semantic-ui-react'
 
-const emptyEvent = {
-    title:'',
-    date:'',
-    city:'',
-    venue:'',
-    hostedBy:''
+
+const mapStateToProps = (state, ownProps) => {
+    const eventId = ownProps.match.params.id;
+    let event = {
+        title:'',
+        date:'',
+        city:'',
+        venue:'',
+        hostedBy:''
+    };
+
+    if(eventId && state.events.length > 0){
+        event = state.events.filter(evt => evt.id === eventId)[0];
+    }
+
+    return {
+            event
+        };
 }
 class EventForm extends Component {
     state = {
-        event: emptyEvent
-    }
-
-    componentDidMount(){
-        if (this.props.selectedEvent !== null){
-            this.setState({
-                event: this.props.selectedEvent
-            })
-        }
-    }
-
-    componentWillReceiveProps(nextProps){
-        // Remove the comments below to witness how this method works
-        // console.log('Current: ', this.props.selectedEvent);
-        // console.log('Next: ', nextProps.selectedEvent);
-        if (nextProps.selectedEvent !== this.props.selectedEvent){
-            this.setState({
-                event: nextProps.selectedEvent || emptyEvent
-            })
-        } 
+        event: Object.assign({}, this.props.event)
     }
 
     onInputChange = (evt) => {
@@ -84,4 +78,4 @@ class EventForm extends Component {
   }
 }
 
-export default EventForm;
+export default connect(mapStateToProps)(EventForm);
