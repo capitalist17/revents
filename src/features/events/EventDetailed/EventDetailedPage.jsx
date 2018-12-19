@@ -11,10 +11,10 @@ import EventDetailedSidebar from './EventDetailedSidebar';
 const EventDetailedPage = () => {
   return (
     <Grid>
-      <Grid.Column width={10}>
-        <EventDetailedChat /> 
+      <Grid.Column width={10}>        
         <EventDetailedHeader /> 
         <EventDetailedInfo /> 
+        <EventDetailedChat /> 
       </Grid.Column>
 
       <Grid.Column width={6}>
