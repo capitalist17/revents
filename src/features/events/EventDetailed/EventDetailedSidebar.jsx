@@ -1,10 +1,29 @@
 import React from 'react'
+import { Segment, List, Item, Label } from "semantic-ui-react";
 
 const EventDetailedSidebar = () => {
   return (
-    <div>
-      <h1>EventDetailedSidebar</h1>
-    </div>
+       <div>
+          <Segment textAlign="center" attached="top" secondary inverted color="teal" 
+                   style={{ border: 'none' }} >
+            2 People Going
+          </Segment>
+          <Segment attached>
+            <List relaxed divided>
+              <Item style={{ position: 'relative' }}>
+                <Label style={{ position: 'absolute' }} color="orange" ribbon="right" >
+                  Host
+                </Label>
+                <Item.Image size="tiny" src="/assets/user.png" />
+                <Item.Content verticalAlign="middle">
+                  <Item.Header as="h3">
+                    <a>Attendee Name</a>
+                  </Item.Header>
+                </Item.Content>
+              </Item>
+            </List>
+          </Segment>
+        </div>
   )
 }
 
