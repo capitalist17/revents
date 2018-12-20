@@ -6,6 +6,8 @@ import { Segment, Form, Button } from 'semantic-ui-react'
 import cuid from 'cuid'; // generates random unique ids 
 import { createEvent, updateEvent } from '../eventActions';
 
+import TextInput from '../../../app/common/form/TextInput';
+
 const mapStateToProps = (state, ownProps) => {
     const eventId = ownProps.match.params.id;
     let event = {
@@ -63,11 +65,8 @@ class EventForm extends Component {
     return (
         <Segment>
             <Form onSubmit={this.onFormSubmit}>
-                <Field name='title' type='text' component='input'></Field>
-                {/* <Form.Field>
-                    <label>Event Title</label>
-                    <input name='title' value={event.title} onChange={this.onInputChange} placeholder="Event Title" />
-                </Form.Field> */}
+                <Field name='title' type='text' component={TextInput} placeholder='Event Name'></Field>
+                
                 <Form.Field>
                     <label>Event Date</label>
                     <input type="date" name='date' value={event.date} onChange={this.onInputChange} placeholder="Event Date" />
