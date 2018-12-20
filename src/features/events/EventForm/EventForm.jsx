@@ -4,6 +4,7 @@ import { reduxForm, Field } from 'redux-form';
 import { combineValidators, composeValidators, isRequired, hasLengthGreaterThan } from 'revalidate';
 import { Segment, Form, Button, Grid, Header } from 'semantic-ui-react';
 
+import moment from 'moment';
 import cuid from 'cuid'; // generates random unique ids 
 import { createEvent, updateEvent } from '../eventActions';
 
@@ -56,7 +57,10 @@ class EventForm extends Component {
    
     onFormSubmit  = (values) => {
         //console.log(values);
-       
+
+        // The line below is to fix the problem in the date is passed as an object instead if a string. 
+        // This caused the form to break and not being able to submit the form.
+        values.date = moment(values.date).format(); 
         if (this.props.initialValues.id){ // If id is present, then update the event, else a create a new one
             this.props.updateEvent(values);
             this.props.history.goBack();
@@ -68,6 +72,7 @@ class EventForm extends Component {
             this.props.history.push('/events');
         }        
     }
+
     render() {
         const {invalid, submitting, pristine} = this.props;
         return (
@@ -90,7 +95,7 @@ class EventForm extends Component {
                             <Field name='venue' type='text' placeholder='Venue location' 
                                 component={TextInput} />
                             <Field name='date' type='text' placeholder='Date and time of the event' width={7}
-                                component={DateInput} dateFormat='DD-MMM-YYYY HH:mm' timeFormat='HH:mm' showTimeSelect />
+                                component={DateInput} dateFormat='YYYY-MM-DD HH:mm' timeFormat='HH:mm' showTimeSelect />
                             
                             <Button disabled={invalid || submitting || pristine} positive type="submit"> 
                                 Submit 
