@@ -10,6 +10,7 @@ import { createEvent, updateEvent } from '../eventActions';
 import TextInput from '../../../app/common/form/TextInput';
 import TextArea from '../../../app/common/form/TextArea';
 import SelectInput from '../../../app/common/form/SelectInput';
+import DateInput from '../../../app/common/form/DateInput';
 
 const mapStateToProps = (state, ownProps) => {
     const eventId = ownProps.match.params.id;
@@ -75,16 +76,21 @@ class EventForm extends Component {
                     <Segment>                    
                         <Form onSubmit={this.props.handleSubmit(this.onFormSubmit)}>
                             <Header sub color='teal' content='Event Details'></Header>
-                            <Field name='title' type='text' component={TextInput} placeholder='Give your event a name' />
-                            <Field name='category' type='text' 
-                                    component={SelectInput} options={category}
-                                    placeholder='What is your event about' />
-                            <Field name='description' type='text' rows={4} component={TextArea} placeholder='Describe more about your event' />
-                            <Field name='hostedBy' type='text' component={TextInput} placeholder='Who is hosting this event' />
+                            <Field name='title' type='text' placeholder='Give your event a name' 
+                                component={TextInput} />
+                            <Field name='category' type='text' placeholder='What is your event about'  
+                                component={SelectInput} options={category} width={5} />
+                            <Field name='description' type='text' placeholder='Describe more about your event' 
+                                rows={4} component={TextArea} />
+                            <Field name='hostedBy' type='text' placeholder='Who is hosting this event' 
+                                component={TextInput} />
                             <Header sub color='teal' content='Event Location Details'></Header>
-                            <Field name='city' type='text' component={TextInput} placeholder='In which city is this event held' />
-                            <Field name='venue' type='text' component={TextInput} placeholder='Venue location' />
-                            <Field name='date' type='text' component={TextInput} placeholder='Date when the event is held' />
+                            <Field name='city' type='text' placeholder='In which city is this event held' 
+                                component={TextInput} />
+                            <Field name='venue' type='text' placeholder='Venue location' 
+                                component={TextInput} />
+                            <Field name='date' type='text' placeholder='Date and time of the event' width={7}
+                                component={DateInput} dateFormat='DD-MMM-YYYY HH:mm' timeFormat='HH:mm' showTimeSelect />
                             
                             <Button disabled={invalid || submitting || pristine} positive type="submit"> 
                                 Submit 
