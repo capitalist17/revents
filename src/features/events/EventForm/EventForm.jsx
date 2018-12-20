@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { reduxForm, Field } from 'redux-form';
 import { Segment, Form, Button } from 'semantic-ui-react'
 
 import cuid from 'cuid'; // generates random unique ids 
@@ -62,10 +63,11 @@ class EventForm extends Component {
     return (
         <Segment>
             <Form onSubmit={this.onFormSubmit}>
-                <Form.Field>
+                <Field name='title' type='text' component='input'></Field>
+                {/* <Form.Field>
                     <label>Event Title</label>
                     <input name='title' value={event.title} onChange={this.onInputChange} placeholder="Event Title" />
-                </Form.Field>
+                </Form.Field> */}
                 <Form.Field>
                     <label>Event Date</label>
                     <input type="date" name='date' value={event.date} onChange={this.onInputChange} placeholder="Event Date" />
@@ -92,4 +94,5 @@ class EventForm extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EventForm);
+export default 
+connect(mapStateToProps, mapDispatchToProps) ( reduxForm({form:'EventForm'}) (EventForm) );
