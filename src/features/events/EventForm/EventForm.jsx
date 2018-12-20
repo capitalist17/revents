@@ -7,6 +7,7 @@ import cuid from 'cuid'; // generates random unique ids
 import { createEvent, updateEvent } from '../eventActions';
 
 import TextInput from '../../../app/common/form/TextInput';
+import TextArea from '../../../app/common/form/TextArea';
 
 const mapStateToProps = (state, ownProps) => {
     const eventId = ownProps.match.params.id;
@@ -55,7 +56,7 @@ class EventForm extends Component {
                         <Header sub color='teal' content='Event Details'></Header>
                         <Field name='title' type='text' component={TextInput} placeholder='Give your event a name' />
                         <Field name='category' type='text' component={TextInput} placeholder='What is your event about' />
-                        <Field name='description' type='text' component={TextInput} placeholder='Describe more about your event' />
+                        <Field name='description' type='text' rows={4} component={TextArea} placeholder='Describe more about your event' />
                         <Field name='hostedBy' type='text' component={TextInput} placeholder='Who is hosting this event' />
                         <Header sub color='teal' content='Event Location Details'></Header>
                         <Field name='city' type='text' component={TextInput} placeholder='In which city is this event held' />
