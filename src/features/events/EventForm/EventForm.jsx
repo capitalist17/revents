@@ -12,19 +12,17 @@ import SelectInput from '../../../app/common/form/SelectInput';
 
 const mapStateToProps = (state, ownProps) => {
     const eventId = ownProps.match.params.id;
-    let event = {
-        title:'',
-        date:'',
-        city:'',
-        venue:'',
-        hostedBy:''
-    };
+
+    let event = { }; // since redux form is registering all our field we dont have to specify them manually
 
     if(eventId && state.events.length > 0){
         event = state.events.filter(evt => evt.id === eventId)[0];
     }
 
-    return { event };
+    // Since we are using redux forms, this component recieves additional props. One of those props is
+    // initialValues. To this, we assign our event object. So, if we are updating the event, it will be
+    // populated with existing values and if we are creating the event, it will be inited with null values.
+    return { initialValues: event };
 }
 
 const mapDispatchToProps = {
@@ -42,27 +40,27 @@ const category = [
 
 class EventForm extends Component {
    
-    onFormSubmit  = (evt) => {
-        evt.preventDefault();
-        //console.log(this.state.event);
-        if (this.state.event.id){ // If id is present, then update the event, else a create a new one
-            this.props.updateEvent(this.state.event);
+    onFormSubmit  = (values) => {
+        //console.log(values);
+       
+        if (this.props.initialValues.id){ // If id is present, then update the event, else a create a new one
+            this.props.updateEvent(values);
             this.props.history.goBack();
         } else {
-            const newEvent = {...this.state.event, 
+            const newEvent = {...values, 
                                 id: cuid(), 
                                 hostPhotoURL:'/assets/user.png' };
             this.props.createEvent(newEvent);
             this.props.history.push('/events');
         }        
     }
-  render() {
-    
+    render() {
+
     return (
         <Grid>
             <Grid.Column width={10}>
                 <Segment>                    
-                    <Form onSubmit={this.onFormSubmit}>
+                    <Form onSubmit={this.props.handleSubmit(this.onFormSubmit)}>
                         <Header sub color='teal' content='Event Details'></Header>
                         <Field name='title' type='text' component={TextInput} placeholder='Give your event a name' />
                         <Field name='category' type='text' 
@@ -83,8 +81,9 @@ class EventForm extends Component {
         </Grid>
         
     )
-  }
-}
+    }
+    }
 
 export default 
-connect(mapStateToProps, mapDispatchToProps) ( reduxForm({form:'EventForm'}) (EventForm) );
+connect(mapStateToProps, mapDispatchToProps) 
+            ( reduxForm({form:'EventForm', enableReinitialize: true}) (EventForm) );
