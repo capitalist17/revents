@@ -18,8 +18,7 @@ const mapStateToProps = (state) => ({
 })
 
 class NavBar extends Component {
-  //state = {authenticated:false}
-
+  
   handleSignIn = () => {
     //this.setState({ authenticated: true });
     this.props.openModal('LoginModal')
@@ -30,7 +29,6 @@ class NavBar extends Component {
   };
 
   handleSignOut = () => {
-    //this.setState({ authenticated: false });
     this.props.logout();
     this.props.history.push('/'); 
     // Above line does not work for non routed components like the Navbar. If you see App.jsx, the Navbar
@@ -41,7 +39,6 @@ class NavBar extends Component {
   };
 
   render() {
-    //const {authenticated} = this.state;
     const {auth} = this.props;
     const authenticated = auth.authenticated
     return (
