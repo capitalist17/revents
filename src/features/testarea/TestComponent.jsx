@@ -64,7 +64,9 @@ class TestComponent extends Component {
           {this.state.scriptLoaded && <PlacesAutocomplete inputProps={inputProps} /> }          
           <button type="submit">Submit</button>
         </form>
-        
+
+        <br/> <br/> <br/> <hr/>
+        {!!this.state.scriptLoaded && 
         <div style={{ height: '300px', width: '100%' }}>
           <GoogleMapReact
             bootstrapURLKeys={{ key: 'AIzaSyD9EdV2JfPG1Vfviw9gf_HlblIUfs7Ie2E' }}
@@ -77,7 +79,9 @@ class TestComponent extends Component {
               text="My Marker"
             />
           </GoogleMapReact>
-        </div>
+        </div> }
+        <hr/> <br/> <br/> <br/>  
+            
       </div>
     )
   }
