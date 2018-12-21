@@ -62,6 +62,7 @@ class TestComponent extends Component {
         <Button onClick={incrementCounter} color='green' content='Increment' />
         <Button onClick={() => decrementCounter()} color='red' content='Decrement' />
         <Button onClick={() => openModal('TestModal',{somedata:43})} color='blue' content='Open Model' />
+        <Button onClick={() => openModal('LoginModal',{somedata:43})} color='teal' content='Open Model' />
         <br/> <br/> <br/> <br/>
         <form onSubmit={this.handleFormSubmit}>
           {this.state.scriptLoaded && <PlacesAutocomplete inputProps={inputProps} /> }          

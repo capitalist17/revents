@@ -1,16 +1,20 @@
 /** This Component is use in App.jsx. Why?
- * Since Models are top level components and can exist on its own, in our engineering design,
+ * Since Modals are top level components and can exist on its own, in our engineering design,
  * we intend to dynamically open the required model and control it the manner that we want.
- * So we have hooked all the models to the redux store and have used ModelManager to manage all 
- * all the models. This is a labourious task initially but eventually bear fruits as we wire up
+ * So we have hooked all the modals to the redux store and have used ModalManager to manage all 
+ * all the modals. This is a labourious task initially but eventually bear fruits as we wire up
  * more models in our application. 
  */
-import React from 'react'
-import { connect } from 'react-redux'
-import TestModal from './TestModal'
+import React from 'react';
+import { connect } from 'react-redux';
+import TestModal from './TestModal';
+import LoginModal from './LoginModal';
+import RegisterModal from './RegisterModal';
 
 const modalLookup = {
-    TestModal
+    TestModal,
+    LoginModal,
+    RegisterModal
   }
 
 const mapStateToProps = (state) => ({
