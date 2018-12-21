@@ -76,18 +76,13 @@ class EventForm extends Component {
           .catch(error => console.error('Error', error)) 
     }
 
-    // handleCitySelect = selectedCity => {
-    //     geocodeByAddress(selectedCity)
-    //       .then(results => getLatLng(results[0]))
-    //       .then(latlng => {
-    //         this.setState({
-    //           cityLatLng: latlng
-    //         });
-    //       })
-        //   .then(() => {
-        //     this.props.change('city', selectedCity)
-        //   })
-    //   };
+    handleVenueSelect = (selectedVenue) => {
+        geocodeByAddress(selectedVenue)
+          .then(results => getLatLng(results[0]))
+          .then(latLng => this.setState({ venueLatLng : latLng }) )
+          .then(() => { this.props.change('venue', selectedVenue) })
+          .catch(error => console.error('Error', error)) 
+    }
 
     onFormSubmit  = (values) => {
         //console.log(values);
@@ -95,6 +90,8 @@ class EventForm extends Component {
         // The line below is to fix the problem in the date is passed as an object instead if a string. 
         // This caused the form to break and not being able to submit the form.
         values.date = moment(values.date).format(); 
+        values.venueLatLng = this.state.venueLatLng;
+
         if (this.props.initialValues.id){ // If id is present, then update the event, else a create a new one
             this.props.updateEvent(values);
             this.props.history.goBack();
@@ -134,6 +131,7 @@ class EventForm extends Component {
                             { this.state.scriptLoaded && 
                             <Field name='venue' type='text' placeholder='Venue location' 
                                 component={PlaceInput} 
+                                onSelect={this.handleVenueSelect}
                                 options={{
                                     location: new google.maps.LatLng(this.state.cityLatLng),
                                     radius:1000,
