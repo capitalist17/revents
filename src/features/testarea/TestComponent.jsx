@@ -6,6 +6,7 @@ import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-au
 import GoogleMapReact from 'google-map-react';
 
 import { incrementCounter, decrementCounter } from './testActions'
+import { openModal } from '../modals/modalActions';
 
 const mapStateToProps = (state) => ({
   data: state.test.data
@@ -13,7 +14,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
   incrementCounter,
-  decrementCounter
+  decrementCounter,
+  openModal
 }
 
 const Marker = () => <Icon name='marker' size='big' color='red' />
@@ -49,7 +51,7 @@ class TestComponent extends Component {
       value: this.state.address,
       onChange: this.onChange,
     }
-    const {incrementCounter, decrementCounter, data} = this.props;
+    const {incrementCounter, decrementCounter, data, openModal} = this.props;
     return (
       <div>
         <Script 
@@ -58,7 +60,8 @@ class TestComponent extends Component {
         <h1>Test Area</h1>
         <h3>The answer is: {data}</h3>
         <Button onClick={incrementCounter} color='green' content='Increment' />
-        <Button onClick={decrementCounter} color='red' content='Decrement' />
+        <Button onClick={() => decrementCounter()} color='red' content='Decrement' />
+        <Button onClick={() => openModal('TestModal',{somedata:43})} color='blue' content='Open Model' />
         <br/> <br/> <br/> <br/>
         <form onSubmit={this.handleFormSubmit}>
           {this.state.scriptLoaded && <PlacesAutocomplete inputProps={inputProps} /> }          
