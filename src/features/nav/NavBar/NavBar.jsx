@@ -6,13 +6,19 @@ import { Menu, Button, Container } from 'semantic-ui-react';
 import SignedOutMenu from '../Menus/SignedOutMenu';
 import SignedInMenu from '../Menus/SignedInMenu';
 import { openModal } from '../../modals/modalActions';
+import { logout } from '../../auth/authActions';
 
 const mapDispatchToProps = {
-    openModal
+    openModal,
+    logout
 }
 
+const mapStateToProps = (state) => ({
+    auth: state.auth
+})
+
 class NavBar extends Component {
-  state = {authenticated:false}
+  //state = {authenticated:false}
 
   handleSignIn = () => {
     //this.setState({ authenticated: true });
@@ -24,7 +30,8 @@ class NavBar extends Component {
   };
 
   handleSignOut = () => {
-    this.setState({ authenticated: false });
+    //this.setState({ authenticated: false });
+    this.props.logout();
     this.props.history.push('/'); 
     // Above line does not work for non routed components like the Navbar. If you see App.jsx, the Navbar
     // is shown irrespective of the router and is not configured inside the router. So in order to make
@@ -34,7 +41,9 @@ class NavBar extends Component {
   };
 
   render() {
-    const {authenticated} = this.state;
+    //const {authenticated} = this.state;
+    const {auth} = this.props;
+    const authenticated = auth.authenticated
     return (
         <Menu inverted fixed="top">
             <Container>
@@ -53,7 +62,7 @@ class NavBar extends Component {
                 </Menu.Item>
                 }
 
-                {authenticated ? <SignedInMenu signOut={this.handleSignOut}/> 
+                {authenticated ? <SignedInMenu currentUser={auth.currentUser} signOut={this.handleSignOut}/> 
                                : <SignedOutMenu signIn={this.handleSignIn} register={this.handleRegister} /> }
                 
             </Container>
@@ -62,4 +71,4 @@ class NavBar extends Component {
   }
 }
 
-export default withRouter( connect(null, mapDispatchToProps) (NavBar) );
+export default withRouter( connect(mapStateToProps, mapDispatchToProps) (NavBar) );
