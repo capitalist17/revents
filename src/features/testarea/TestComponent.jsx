@@ -5,17 +5,21 @@ import Script from 'react-load-script';
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 import GoogleMapReact from 'google-map-react';
 
-import { incrementCounter, decrementCounter } from './testActions'
+import { incrementCounter, decrementCounter, 
+         incrementAsync, decrementAsync } from './testActions'
 import { openModal } from '../modals/modalActions';
 
 const mapStateToProps = (state) => ({
-  data: state.test.data
+  data: state.test.data,
+  loading: state.test.loading
 })
 
 const mapDispatchToProps = {
   incrementCounter,
-  decrementCounter,
-  openModal
+  decrementCounter,  
+  openModal,
+  incrementAsync, 
+  decrementAsync
 }
 
 const Marker = () => <Icon name='marker' size='big' color='red' />
@@ -51,7 +55,8 @@ class TestComponent extends Component {
       value: this.state.address,
       onChange: this.onChange,
     }
-    const {incrementCounter, decrementCounter, data, openModal} = this.props;
+    const {incrementCounter, decrementCounter, data, openModal, 
+            incrementAsync, decrementAsync, loading } = this.props;
     return (
       <div>
         <Script 
@@ -63,6 +68,8 @@ class TestComponent extends Component {
         <Button onClick={() => decrementCounter()} color='red' content='Decrement' />
         <Button onClick={() => openModal('TestModal',{somedata:43})} color='blue' content='Open Model' />
         <Button onClick={() => openModal('LoginModal',{somedata:43})} color='teal' content='Open Model' />
+        <Button onClick={incrementAsync} loading = {loading} color='green' content='Increment-Async' />
+        <Button onClick={decrementAsync} loading = {loading} color='red' content='Decrement-Async' />
         <br/> <br/> <br/> <br/>
         <form onSubmit={this.handleFormSubmit}>
           {this.state.scriptLoaded && <PlacesAutocomplete inputProps={inputProps} /> }          
