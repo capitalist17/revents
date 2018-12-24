@@ -1,4 +1,4 @@
-import { CREATE_EVENT, UPDATE_EVENT, DELETE_EVENT } from './eventConstants';
+import { CREATE_EVENT, UPDATE_EVENT, DELETE_EVENT, FETCH_EVENTS } from './eventConstants';
 
  const initialState = [];
 
@@ -11,6 +11,8 @@ const eventReducer = (state = initialState, action) => {
                 , Object.assign({}, action.payload.event)];
       case DELETE_EVENT:
         return [...state.filter(event => event.id !== action.payload.eventId)]
+      case FETCH_EVENTS:
+        return action.payload.events
       default:
         return state;
     }

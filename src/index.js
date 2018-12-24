@@ -7,9 +7,11 @@ import 'semantic-ui-css/semantic.min.css';
 import App from './app/layout/App';
 import * as serviceWorker from './serviceWorker';
 import { configureStore } from './app/store/ConfigureStore';
-import ScrollToTop from '../src/app/common/util/ScrollToTop'
+import ScrollToTop from '../src/app/common/util/ScrollToTop';
+import { loadEvents } from './features/events/eventActions';
 
 const store = configureStore();
+store.dispatch(loadEvents());
 
 ReactDOM.render(
     <Provider store = {store}>
