@@ -9,6 +9,11 @@ class EventDetailedInfo extends Component {
     showMap: false
   }
 
+  componentWillUnmount(){
+    // This is the lifecycle method that should be used to cleanup activity.
+    this.setState({showMap:false})
+  }
+
   showMapToggle = () => {
     this.setState(prevState => ({
       showMap: !prevState.showMap

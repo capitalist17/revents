@@ -6,6 +6,7 @@ import EventList from '../EventList/EventList';
 import { connect } from 'react-redux'; // using this we can bind this component to the redux store
 import { deleteEvent } from '../eventActions';
 
+import EventActivity from '../EventActivity/EventActivity'
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 
 const mapStateToProps = (state) => ({
@@ -35,7 +36,7 @@ class EventDashboard extends Component {
                        events = {events}/>
          </Grid.Column>
          <Grid.Column width={6}> 
-               
+            <EventActivity />
          </Grid.Column>
      </Grid>
     )
