@@ -4,13 +4,16 @@ import { Grid } from 'semantic-ui-react';
 import EventList from '../EventList/EventList';
 
 import { connect } from 'react-redux'; // using this we can bind this component to the redux store
+import { firestoreConnect } from 'react-redux-firebase'; // Binding to connecto to firebase firestore
+
 import { deleteEvent } from '../eventActions';
 
 import EventActivity from '../EventActivity/EventActivity'
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 
 const mapStateToProps = (state) => ({
-  events: state.events,
+  //events: state.events,
+  events: state.firestore.ordered.events,
   loading: state.async.loading
 })
 
@@ -43,4 +46,6 @@ class EventDashboard extends Component {
   }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(EventDashboard);
+export default connect(mapStateToProps, mapDispatchToProps) (
+    firestoreConnect([{ collection: 'events' }]) (EventDashboard)
+    );

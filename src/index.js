@@ -10,10 +10,10 @@ import App from './app/layout/App';
 import * as serviceWorker from './serviceWorker';
 import { configureStore } from './app/store/ConfigureStore';
 import ScrollToTop from '../src/app/common/util/ScrollToTop';
-import { loadEvents } from './features/events/eventActions';
+// import { loadEvents } from './features/events/eventActions';
 
 const store = configureStore();
-store.dispatch(loadEvents()); //Load initial data when the application starts
+// store.dispatch(loadEvents()); //Load initial data when the application starts
 
 ReactDOM.render(
     <Provider store = {store}>
