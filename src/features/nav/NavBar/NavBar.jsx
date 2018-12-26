@@ -7,11 +7,9 @@ import { Menu, Button, Container } from 'semantic-ui-react';
 import SignedOutMenu from '../Menus/SignedOutMenu';
 import SignedInMenu from '../Menus/SignedInMenu';
 import { openModal } from '../../modals/modalActions';
-import { logout } from '../../auth/authActions';
 
 const mapDispatchToProps = {
-    openModal,
-    logout
+    openModal
 }
 
 const mapStateToProps = (state) => ({
