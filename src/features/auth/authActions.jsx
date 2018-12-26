@@ -1,20 +1,19 @@
+import { SubmissionError } from 'redux-form';
 import { LOGIN_USER, SIGN_OUT_USER } from './authConstants';
 import { closeModal } from '../modals/modalActions';
 export const login = (creds) => {
-  // Below is the normal way of doing things
-  /*
-  return {
-    type: LOGIN_USER,
-    payload: { creds }
-  }
-  */
-  // Below is the thunk way of doing things
-  return dispatch => {
-    dispatch({type: LOGIN_USER,
-              payload: {creds }
-            })
-    // close the modal after login has taken place
-    dispatch(closeModal())
+  return async (dispatch, getState, {getFirebase}) => {
+    const firebase = getFirebase();
+    const {email,password} = creds
+    try {
+      await firebase.auth().signInWithEmailAndPassword(email, password)
+      dispatch(closeModal())
+    } catch (error) {
+      console.log(error);
+      throw new SubmissionError({ _error: error.message })
+    }
+    //dispatch({type: LOGIN_USER, payload: {creds } })
+    
   }
 } 
 
