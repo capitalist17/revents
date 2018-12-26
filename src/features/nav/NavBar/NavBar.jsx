@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { withFirebase } from 'react-redux-firebase';
 import { NavLink, Link, withRouter } from 'react-router-dom'
 import { Menu, Button, Container } from 'semantic-ui-react';
 
@@ -14,7 +15,7 @@ const mapDispatchToProps = {
 }
 
 const mapStateToProps = (state) => ({
-    auth: state.auth
+    auth: state.firebase.auth
 })
 
 class NavBar extends Component {
@@ -29,7 +30,7 @@ class NavBar extends Component {
   };
 
   handleSignOut = () => {
-    this.props.logout();
+    this.props.firebase.logout();
     this.props.history.push('/'); 
     // Above line does not work for non routed components like the Navbar. If you see App.jsx, the Navbar
     // is shown irrespective of the router and is not configured inside the router. So in order to make
@@ -40,7 +41,7 @@ class NavBar extends Component {
 
   render() {
     const {auth} = this.props;
-    const authenticated = auth.authenticated
+    const authenticated = auth.isLoaded && !auth.isEmpty
     return (
         <Menu inverted fixed="top">
             <Container>
@@ -59,7 +60,7 @@ class NavBar extends Component {
                 </Menu.Item>
                 }
 
-                {authenticated ? <SignedInMenu currentUser={auth.currentUser} signOut={this.handleSignOut}/> 
+                {authenticated ? <SignedInMenu auth={auth} signOut={this.handleSignOut}/> 
                                : <SignedOutMenu signIn={this.handleSignIn} register={this.handleRegister} /> }
                 
             </Container>
@@ -68,4 +69,4 @@ class NavBar extends Component {
   }
 }
 
-export default withRouter( connect(mapStateToProps, mapDispatchToProps) (NavBar) );
+export default withRouter( withFirebase ( connect(mapStateToProps, mapDispatchToProps) (NavBar) ) );
