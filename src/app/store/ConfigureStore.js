@@ -10,9 +10,10 @@ import rootReducer from '../reducers/rootReducer';
 // react-redux-firebase (rrf) config 
 const rrf_config = {
     userProfile: 'users',        // this tells react-redux-firebase where we are storing the user profile
-    attachAuthIsReady: true,    // We have to know when the authentication from firebase is available
-    useFirestoreForProfile:true // by default firestore stores the profile info in realtime DB. So,
-                                // here we override the default and specifying firestore as our DB.
+    attachAuthIsReady: true,     // We have to know when the authentication from firebase is available
+    useFirestoreForProfile:true, // by default firestore stores the profile info in realtime DB. So,
+                                 // here we override the default and specifying firestore as our DB.
+    updateProfileOnLogin : false 
 }
 
 export const configureStore = (preloadedState) => {
