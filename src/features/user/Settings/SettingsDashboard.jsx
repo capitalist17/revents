@@ -9,6 +9,7 @@ import PhotosPage from './PhotosPage';
 import AccountPage from './AccountPage';
 
 import { updatePassword } from '../../auth/authActions';
+import { updateProfile } from '../userActions';
 
 const mapStateToProps = (state) => {
   return {
@@ -18,18 +19,20 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-  updatePassword
+  updatePassword,
+  updateProfile
 }
 
 // all the state information as well as action information is passed to this component as props parameter
-const SettingsDashboard = ({providerId, updatePassword, user}) => {
+const SettingsDashboard = ({providerId, updatePassword, user, updateProfile}) => {
   return (
     <Grid>
       <Grid.Column width={12}>
         <Switch>
           <Redirect exact from='/settings' to='/settings/basic' />
           {/* If you want the fields to be populated, then use initialvalues */}
-          <Route path='/settings/basic' render={() => <BasicPage initialValues={user} />} ></Route>
+          <Route path='/settings/basic' 
+                render={() => <BasicPage initialValues={user} updateProfile={updateProfile}/>} ></Route>
           <Route path='/settings/about' component={AboutPage}></Route>
           <Route path='/settings/photos' component={PhotosPage}></Route>
           {/* In case of AccountPage n initialvalues had to be populated as its a password field */}
