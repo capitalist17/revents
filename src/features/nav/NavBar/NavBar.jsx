@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { withFirebase } from 'react-redux-firebase';
 import { NavLink, Link, withRouter } from 'react-router-dom'
 import { Menu, Button, Container } from 'semantic-ui-react';

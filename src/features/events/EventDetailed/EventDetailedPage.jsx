@@ -10,13 +10,20 @@ import EventDetailedSidebar from './EventDetailedSidebar';
 const mapStateToProps = (state, ownProps) => {
   const eventId = ownProps.match.params.id;
   let event = {};
-
+  let events = state.firestore.ordered.events;
+  
+  if (eventId && events.length > 0) {
+    // The filter function returns an Array. Here even if its a single event, we have 
+    // to use the array subscript syntax to fetch the required event object
+    event = events.filter( event => event.id === eventId)[0];
+  }
+  /*
   if (eventId && state.events.length > 0) {
     // The filter function returns an Array. Here even if its a single event, we have 
     // to use the array subscript syntax to fetch the required event object
     event = state.events.filter( event => event.id === eventId)[0];
   }
-
+  */
   return {event};
 } 
 
@@ -30,7 +37,7 @@ const EventDetailedPage = ({event}) => {
       </Grid.Column>
 
       <Grid.Column width={6}>
-        <EventDetailedSidebar attendees={event.attendees} />
+        {/* <EventDetailedSidebar attendees={event.attendees} /> */}
       </Grid.Column>
     </Grid>
   )
