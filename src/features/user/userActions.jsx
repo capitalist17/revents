@@ -17,3 +17,6 @@ export const updateProfile = (user) =>
             console.log(error)
         }
     }
+
+    // Note: for this action we dont define any of our own Reducers. 
+    // All the reducers are defined by firebase and firestore reducers 
