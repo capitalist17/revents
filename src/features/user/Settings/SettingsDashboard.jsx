@@ -33,7 +33,8 @@ const SettingsDashboard = ({providerId, updatePassword, user, updateProfile}) =>
           {/* If you want the fields to be populated, then use initialvalues */}
           <Route path='/settings/basic' 
                 render={() => <BasicPage initialValues={user} updateProfile={updateProfile}/>} ></Route>
-          <Route path='/settings/about' component={AboutPage}></Route>
+          <Route path='/settings/about' 
+                render={() => <AboutPage initialValues={user} updateProfile={updateProfile}/>} ></Route>
           <Route path='/settings/photos' component={PhotosPage}></Route>
           {/* In case of AccountPage n initialvalues had to be populated as its a password field */}
           <Route path='/settings/account' 
