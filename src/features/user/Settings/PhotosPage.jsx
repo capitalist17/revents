@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
+import { firestoreConnect } from 'react-redux-firebase';
+import { compose } from 'redux';
 import { toastr } from 'react-redux-toastr';
 import Dropzone from 'react-dropzone';
 import Cropper from 'react-cropper';
@@ -8,9 +10,25 @@ import {Image, Segment, Header, Divider, Grid, Button, Card, Icon} from 'semanti
 
 import { uploadProfileImage } from '../userActions';
 
+const mapStateToProps = state => ({
+  auth: state.firebase.auth,
+  profile: state.firebase.profile
+});
+
 const mapDispatchToProps = {
   uploadProfileImage
 }
+
+const query = ({ auth }) => {
+  return [
+    {
+      collection: 'users',
+      doc: auth.uid,
+      subcollections: [{ collection: 'photos' }],
+      storeAs: 'photos'
+    }
+  ];
+};
 
 class PhotosPage extends Component {
     state = {
@@ -125,4 +143,9 @@ class PhotosPage extends Component {
     }
 }
 
-export default connect(null, mapDispatchToProps)(PhotosPage);
+//export default connect(null, mapDispatchToProps)(PhotosPage);
+
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  firestoreConnect(auth => query(auth))
+)(PhotosPage);
