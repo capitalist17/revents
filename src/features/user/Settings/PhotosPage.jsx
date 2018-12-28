@@ -1,9 +1,16 @@
 import React, {Component} from 'react';
+import { connect } from 'react-redux';
+import { toastr } from 'react-redux-toastr';
 import Dropzone from 'react-dropzone';
 import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
 import {Image, Segment, Header, Divider, Grid, Button, Card, Icon} from 'semantic-ui-react';
 
+import { uploadProfileImage } from '../userActions';
+
+const mapDispatchToProps = {
+  uploadProfileImage
+}
 
 class PhotosPage extends Component {
     state = {
@@ -31,6 +38,23 @@ class PhotosPage extends Component {
           image: blob
         });
       }, 'image/jpeg');
+    };
+    
+    cancelCrop = () => {
+      this.setState({
+        files: [],
+        image: {}
+      });
+    };
+
+    uploadImage = async () => {
+      try {
+        await this.props.uploadProfileImage(this.state.image, this.state.fileName);
+        this.cancelCrop();
+        toastr.success("Success", "Photo has been uploaded");
+      } catch (error) {
+        toastr.error("Oops", error.message);
+      }
     };
 
     render() {
@@ -64,8 +88,17 @@ class PhotosPage extends Component {
                     <Grid.Column width={4}>
                         <Header sub color='teal' content='Step 3 - Preview and Upload' />
                         {this.state.files[0] &&
-                        <Image style={{ minHeight: '200px', minWidth: '200px' }} 
-                        src={this.state.cropResult} /> }
+                        <div>
+                          <Image style={{ minHeight: '200px', minWidth: '200px' }}
+                                 src={this.state.cropResult} />
+                          <Button.Group>
+                            <Button onClick={this.uploadImage} 
+                                    style={{ width: '100px' }} positive icon="check" />
+                            <Button onClick={this.cancelCrop} 
+                                    style={{ width: '100px' }} icon="close" />
+                          </Button.Group>
+                        </div>
+                       }
                     </Grid.Column>
 
                 </Grid>
@@ -79,17 +112,17 @@ class PhotosPage extends Component {
                         <Button positive>Main Photo</Button>
                     </Card>
 
-                        <Card >
-                            <Image src='https://randomuser.me/api/portraits/men/20.jpg' />
-                            <div className='ui two buttons'>
-                                <Button basic color='green'>Main</Button>
-                                <Button basic icon='trash' color='red' />
-                            </div>
-                        </Card>
+                    <Card >
+                        <Image src='https://randomuser.me/api/portraits/men/20.jpg' />
+                        <div className='ui two buttons'>
+                            <Button basic color='green'>Main</Button>
+                            <Button basic icon='trash' color='red' />
+                        </div>
+                    </Card>
                 </Card.Group>
             </Segment>
         );
     }
 }
 
-export default PhotosPage;
+export default connect(null, mapDispatchToProps)(PhotosPage);
