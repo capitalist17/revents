@@ -8,7 +8,7 @@ import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
 import {Image, Segment, Header, Divider, Grid, Button, Card, Icon} from 'semantic-ui-react';
 
-import { uploadProfileImage } from '../userActions';
+import { uploadProfileImage, deletePhoto, setMainPhoto } from '../userActions';
 
 const mapStateToProps = state => ({
   auth: state.firebase.auth,
@@ -17,7 +17,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  uploadProfileImage
+  uploadProfileImage, deletePhoto, setMainPhoto
 }
 
 const query = ({ auth }) => {
@@ -75,6 +75,23 @@ class PhotosPage extends Component {
         toastr.error("Oops", error.message);
       }
     };
+    
+    handlePhotoDelete = (photo) => async () => {
+      try {
+        await this.props.deletePhoto(photo);
+        toastr.success("Success", "Photo deletion was successful");
+      } catch (error) {
+        toastr.error('Oops', error.message)
+      }
+    }
+
+    handleSetMainPhoto = (photo) => async () => {
+      try {
+        await this.props.setMainPhoto(photo)
+      } catch (error) {
+        toastr.error('Oops', error.message)
+      }
+    }
 
     render() {
       const { photos, profile } = this.props;
@@ -143,8 +160,8 @@ class PhotosPage extends Component {
                         <Card key={photo.id}>
                           <Image src={photo.url} />
                           <div className="ui two buttons">
-                            <Button basic color='green'>Main</Button>
-                            <Button basic icon='trash' color='red' />
+                            <Button onClick={this.handleSetMainPhoto(photo)} basic color='green'>Main</Button>
+                            <Button onClick={this.handlePhotoDelete(photo)} basic icon='trash' color='red' />
                           </div>
                         </Card>
                       ))}
