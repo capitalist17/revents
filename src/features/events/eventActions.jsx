@@ -9,7 +9,7 @@ export const createEvent = (event) => {
     return async (dispatch, getState, {getFirestore}) => {
       const firestore = getFirestore();
       const user = firestore.auth().currentUser;
-      const photoURL =  getState().firebase.photoURL;
+      const photoURL =  getState().firebase.profile.photoURL;
       let newEvent = createNewEvent(user, photoURL, event );
 
       try {
