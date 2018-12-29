@@ -1,6 +1,7 @@
 import moment from 'moment';
 import cuid from 'cuid';
 import { toastr } from 'react-redux-toastr'
+import { asyncActionError, asyncActionStart, asyncActionFinish } from '../async/asyncActions'
 
 export const updateProfile = (user) => 
     async (dispatch, getState, {getFirebase}) => {
@@ -37,6 +38,8 @@ async (dispatch, getState, {getFirebase, getFirestore}) => {
         name: imageName
     };
     try {
+        dispatch(asyncActionStart()); // this is a hook on the reducer as to when the action started
+
         // upload the file to fb storage
         let uploadedFile = await firebase.uploadFile(path, file, null, options);
         // get url of image
@@ -54,9 +57,9 @@ async (dispatch, getState, {getFirebase, getFirestore}) => {
             await user.updateProfile({
               photoURL: downloadURL
             });
-          }
+        }
         // add the new photo to photos collection
-        return await firestore.add({
+        await firestore.add({
                                 collection: 'users',
                                 doc: user.uid,
                                 subcollections: [{ collection: 'photos' }]
@@ -65,8 +68,11 @@ async (dispatch, getState, {getFirebase, getFirestore}) => {
                                 name: imageName,
                                 url: downloadURL
                             })
+        
+        dispatch(asyncActionFinish()); // this is a hook on the reducer to indicate the action completion
     } catch (error) {
         console.log(error)
+        dispatch(asyncActionError()); // this is a hook on the reducer to indicate if there was an error
         throw new Error('Problem uploading photo')
     }
 }

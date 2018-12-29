@@ -13,7 +13,8 @@ import { uploadProfileImage, deletePhoto, setMainPhoto } from '../userActions';
 const mapStateToProps = state => ({
   auth: state.firebase.auth,
   profile: state.firebase.profile,
-  photos: state.firestore.ordered.photos
+  photos: state.firestore.ordered.photos,
+  loading: state.async.loading
 });
 
 const mapDispatchToProps = {
@@ -94,7 +95,7 @@ class PhotosPage extends Component {
     }
 
     render() {
-      const { photos, profile } = this.props;
+      const { photos, profile, loading } = this.props;
       let filteredPhotos;
       if (photos) {
           filteredPhotos = photos.filter(photo => {
@@ -136,9 +137,10 @@ class PhotosPage extends Component {
                         <Image style={{ minHeight: '200px', minWidth: '200px' }}
                                 src={this.state.cropResult} />
                         <Button.Group>
-                          <Button onClick={this.uploadImage} 
+                          <Button onClick={this.uploadImage} loading={loading}
                                   style={{ width: '100px' }} positive icon="check" />
-                          <Button onClick={this.cancelCrop} 
+                          {/* Disable the cancel button when the image is loading */}
+                          <Button onClick={this.cancelCrop} disabled={loading}
                                   style={{ width: '100px' }} icon="close" />
                         </Button.Group>
                       </div>
