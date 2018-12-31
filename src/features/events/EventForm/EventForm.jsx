@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
+import { withFirestore } from 'react-redux-firebase';
 import { combineValidators, composeValidators, isRequired, hasLengthGreaterThan } from 'revalidate';
 import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 import Script from 'react-load-script'
@@ -18,14 +19,14 @@ import DateInput from '../../../app/common/form/DateInput';
 import PlaceInput from '../../../app/common/form/PlaceInput';
 
 const mapStateToProps = (state, ownProps) => {
-    const eventId = ownProps.match.params.id;
+    //const eventId = ownProps.match.params.id;
 
-    let event = { }; // since redux form is registering all our field we dont have to specify them manually
-
-    if(eventId && state.events.length > 0){
-        event = state.events.filter(evt => evt.id === eventId)[0];
+    let event = {}; // since redux form is registering all our field we dont have to specify them manually
+    
+    if (state.firestore.ordered.events && state.firestore.ordered.events[0]) {
+        event = state.firestore.ordered.events[0]
     }
-
+  
     // Since we are using redux forms, this component recieves additional props. One of those props is
     // initialValues. To this, we assign our event object. So, if we are updating the event, it will be
     // populated with existing values and if we are creating the event, it will be inited with null values.
@@ -62,6 +63,16 @@ class EventForm extends Component {
         cityLatLng : {},
         venueLatLng : {},
         scriptLoaded: false
+    }
+
+    async componentDidMount(){
+        const {firestore, match} = this.props;
+        let event = await firestore.get(`events/${match.params.id}`);
+        if (event.exist){
+            this.setState({
+                venueLatLng: event.data().venueLatLng
+            })
+        }
     }
 
     handleScriptLoad = () => {
@@ -150,6 +161,8 @@ class EventForm extends Component {
         }
     }
 
-export default connect(mapStateToProps, mapDispatchToProps) ( 
-                            reduxForm({form:'EventForm', enableReinitialize: true, validate}) (EventForm) 
-                            );
+export default withFirestore(
+    connect(mapStateToProps, mapDispatchToProps)(
+        reduxForm({ form: 'EventForm', enableReinitialize: true, validate })(EventForm)
+    )
+);
