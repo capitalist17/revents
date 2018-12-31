@@ -8,11 +8,13 @@ import EventDetailedChat from './EventDetailedChat';
 import EventDetailedHeader from './EventDetailedHeader';
 import EventDetailedInfo from './EventDetailedInfo';
 import EventDetailedSidebar from './EventDetailedSidebar';
+import { objectToArray } from '../../../app/common/util/helpers';
+
 
 const mapStateToProps = (state, ownProps) => {
   //const eventId=ownProps.match.params.id
   let event = {};
-   
+  
   if (state.firestore.ordered.events && state.firestore.ordered.events[0]) {
     event = state.firestore.ordered.events[0]
   }
@@ -39,6 +41,7 @@ class EventDetailedPage extends Component {
   }
   render() {
     const {event} = this.props;
+    const attendees =  event && event.attendees && objectToArray(event.attendees);
     return (
       <Grid>
         <Grid.Column width={10}>        
@@ -48,7 +51,7 @@ class EventDetailedPage extends Component {
         </Grid.Column>
 
         <Grid.Column width={6}>
-          {/* <EventDetailedSidebar attendees={event.attendees} /> */}
+          <EventDetailedSidebar attendees={attendees} />
         </Grid.Column>
       </Grid>
     )
