@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Grid } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { withFirestore } from 'react-redux-firebase';
+import { toastr } from 'react-redux-toastr';
 
 import EventDetailedChat from './EventDetailedChat';
 import EventDetailedHeader from './EventDetailedHeader';
@@ -9,14 +10,11 @@ import EventDetailedInfo from './EventDetailedInfo';
 import EventDetailedSidebar from './EventDetailedSidebar';
 
 const mapStateToProps = (state, ownProps) => {
-  const eventId = ownProps.match.params.id;
+  //const eventId=ownProps.match.params.id
   let event = {};
-  let events = state.firestore.ordered.events;
-  
-  if (eventId && events.length > 0) {
-    // The filter function returns an Array. Here even if its a single event, we have 
-    // to use the array subscript syntax to fetch the required event object
-    event = events.filter( event => event.id === eventId)[0];
+   
+  if (state.firestore.ordered.events && state.firestore.ordered.events[0]) {
+    event = state.firestore.ordered.events[0]
   }
   /*
   if (eventId && state.events.length > 0) {
@@ -29,10 +27,15 @@ const mapStateToProps = (state, ownProps) => {
 } 
 
 class EventDetailedPage extends Component {
+ 
   async componentDidMount(){
-    const {firestore, match} = this.props;
+    const {firestore, match, history} = this.props;
     let event = await firestore.get(`events/${match.params.id}`);
-    console.log(event);
+    //console.log(event);
+    if(!event.exists) {
+      history.push('/events');
+      toastr.error('Sorry', 'Event not found') 
+    }
   }
   render() {
     const {event} = this.props;
