@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Grid } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { withFirestore } from 'react-redux-firebase';
-import { toastr } from 'react-redux-toastr';
 
 import EventDetailedChat from './EventDetailedChat';
 import EventDetailedHeader from './EventDetailedHeader';
@@ -10,7 +9,7 @@ import EventDetailedInfo from './EventDetailedInfo';
 import EventDetailedSidebar from './EventDetailedSidebar';
 import { objectToArray } from '../../../app/common/util/helpers';
 
-import { goingToEvent } from '../../user/userActions';
+import { goingToEvent, cancelGoingToEvent } from '../../user/userActions';
 
 const mapStateToProps = (state, ownProps) => {
   //const eventId=ownProps.match.params.id
@@ -33,7 +32,7 @@ const mapStateToProps = (state, ownProps) => {
 } 
 
 const mapDispatchToProps = {
-  goingToEvent
+  goingToEvent, cancelGoingToEvent
 }
 
 class EventDetailedPage extends Component {
@@ -49,7 +48,7 @@ class EventDetailedPage extends Component {
   }
 
   render() {
-    const {event, auth, goingToEvent } = this.props;
+    const {event, auth, goingToEvent, cancelGoingToEvent } = this.props;
     const attendees =  event && event.attendees && objectToArray(event.attendees);
     const isHost = event.hostUid === auth.uid;
     /* The some() method executes the function once for each element present in the array:
@@ -60,7 +59,8 @@ class EventDetailedPage extends Component {
     return (
       <Grid>
         <Grid.Column width={10}>        
-          <EventDetailedHeader event={event} isHost={isHost} isGoing={isGoing} goingToEvent={goingToEvent}/> 
+          <EventDetailedHeader event={event} isHost={isHost} isGoing={isGoing} 
+                              goingToEvent={goingToEvent} cancelGoingToEvent= {cancelGoingToEvent}/> 
           <EventDetailedInfo event={event} /> 
           <EventDetailedChat /> 
         </Grid.Column>
