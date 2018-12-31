@@ -70,12 +70,19 @@ class EventForm extends Component {
 
     async componentDidMount(){
         const {firestore, match} = this.props;
-        let event = await firestore.get(`events/${match.params.id}`);
-        if (event.exist){
-            this.setState({
-                venueLatLng: event.data().venueLatLng
-            })
-        }
+
+        // The code below just gets the document snapshot but wont listen to changes
+        // let event = await firestore.get(`events/${match.params.id}`);
+        // if (event.exist){
+        //     this.setState({
+        //         venueLatLng: event.data().venueLatLng
+        //     })
+        // }
+
+        // The code below listens to changes but does not provide the doc snapshot
+        // so we stand a chance of losing the venueLatLng if a user modifies the document
+        await firestore.setListener(`events/${match.params.id}`); 
+        
     }
 
     handleScriptLoad = () => {
@@ -100,13 +107,12 @@ class EventForm extends Component {
 
     onFormSubmit  = (values) => {
         //console.log(values);
-
-        // The line below is to fix the problem in the date is passed as an object instead if a string. 
-        // This caused the form to break and not being able to submit the form.
-        values.date = moment(values.date).format(); 
         values.venueLatLng = this.state.venueLatLng;
 
         if (this.props.initialValues.id){ // If id is present, then update the event, else a create a new one
+            if (Object.keys(values.venueLatLng).length === 0){
+                values.venueLatLng = this.props.event.venueLatLng
+            }
             this.props.updateEvent(values);
             this.props.history.goBack();
         } else {

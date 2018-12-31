@@ -53,8 +53,11 @@ export const createEvent = (event) => {
                     ? 'Are you sure you want to cancel the event?'
                     : 'This reactivate the event - are you sure?';
     try {
-      // you are actually adding a property called cancelled to the event document in firestore
-      firestore.update(`events/${eventId}`, { cancelled: cancelled }) 
+      toastr.confirm(message,{
+        // you are actually adding a property called cancelled to the event document in firestore
+        onOk: () => firestore.update(`events/${eventId}`, { cancelled: cancelled }) 
+      })
+            
     } catch (error) {
       console.log(error);
     }
