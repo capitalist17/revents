@@ -8,7 +8,7 @@ import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 import Script from 'react-load-script'
 import { Segment, Form, Button, Grid, Header } from 'semantic-ui-react';
 
-import moment from 'moment';
+//import moment from 'moment';
 //import cuid from 'cuid'; // generates random unique ids 
 import { createEvent, updateEvent, cancelToggle } from '../eventActions';
 
@@ -17,6 +17,7 @@ import TextArea from '../../../app/common/form/TextArea';
 import SelectInput from '../../../app/common/form/SelectInput';
 import DateInput from '../../../app/common/form/DateInput';
 import PlaceInput from '../../../app/common/form/PlaceInput';
+
 
 const mapStateToProps = (state, ownProps) => {
     //const eventId = ownProps.match.params.id;
@@ -71,7 +72,7 @@ class EventForm extends Component {
     async componentDidMount(){
         const {firestore, match} = this.props;
 
-        // The code below just gets the document snapshot but wont listen to changes
+        /* The code below just gets the document snapshot but wont listen to changes */
         // let event = await firestore.get(`events/${match.params.id}`);
         // if (event.exist){
         //     this.setState({
@@ -79,10 +80,16 @@ class EventForm extends Component {
         //     })
         // }
 
-        // The code below listens to changes but does not provide the doc snapshot
-        // so we stand a chance of losing the venueLatLng if a user modifies the document
+        /* The code below listens to changes but does not provide the doc snapshot
+         so we stand a chance of losing the venueLatLng if a user modifies the document */
         await firestore.setListener(`events/${match.params.id}`); 
         
+    }
+
+    /* It is necessary to unset the listener. Sort of garbage collection in java */
+    async componentWillUnmount(){
+        const {firestore, match} = this.props;
+        await firestore.unsetListener(`events/${match.params.id}`); 
     }
 
     handleScriptLoad = () => {
