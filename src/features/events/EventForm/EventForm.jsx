@@ -10,7 +10,7 @@ import { Segment, Form, Button, Grid, Header } from 'semantic-ui-react';
 
 import moment from 'moment';
 //import cuid from 'cuid'; // generates random unique ids 
-import { createEvent, updateEvent } from '../eventActions';
+import { createEvent, updateEvent, cancelToggle } from '../eventActions';
 
 import TextInput from '../../../app/common/form/TextInput';
 import TextArea from '../../../app/common/form/TextArea';
@@ -30,11 +30,14 @@ const mapStateToProps = (state, ownProps) => {
     // Since we are using redux forms, this component recieves additional props. One of those props is
     // initialValues. To this, we assign our event object. So, if we are updating the event, it will be
     // populated with existing values and if we are creating the event, it will be inited with null values.
-    return { initialValues: event };
+    return { 
+        initialValues: event,
+        event:event 
+    };
 }
 
 const mapDispatchToProps = {
-    createEvent, updateEvent
+    createEvent, updateEvent, cancelToggle
 }
 
 const category = [
@@ -113,7 +116,7 @@ class EventForm extends Component {
     }
 
     render() {
-        const {invalid, submitting, pristine} = this.props;
+        const { invalid, submitting, pristine, event, cancelToggle } = this.props;
         return (
             <Grid>
                 <Script 
@@ -152,6 +155,9 @@ class EventForm extends Component {
                                 Submit 
                             </Button>
                             <Button type="button" onClick={this.props.history.goBack}>Cancel</Button>
+                            <Button type="button" color={event.cancelled ? 'green':'red'} floated='right'
+                                content={event.cancelled ? 'Reactivate Event':'Cancel Event'}
+                                onClick={() => cancelToggle(!event.cancelled, event.id)}/>
                         </Form>
                     </Segment>
                 </Grid.Column>
