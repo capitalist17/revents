@@ -10,6 +10,7 @@ import EventDetailedInfo from './EventDetailedInfo';
 import EventDetailedSidebar from './EventDetailedSidebar';
 import { objectToArray } from '../../../app/common/util/helpers';
 
+import { goingToEvent } from '../../user/userActions';
 
 const mapStateToProps = (state, ownProps) => {
   //const eventId=ownProps.match.params.id
@@ -31,19 +32,24 @@ const mapStateToProps = (state, ownProps) => {
   };
 } 
 
+const mapDispatchToProps = {
+  goingToEvent
+}
+
 class EventDetailedPage extends Component {
  
   async componentDidMount(){
-    const {firestore, match, history} = this.props;
-    let event = await firestore.get(`events/${match.params.id}`);
-    //console.log(event);
-    if(!event.exists) {
-      history.push('/events');
-      toastr.error('Sorry', 'Event not found') 
-    }
+    const {firestore, match} = this.props;
+    await firestore.setListener(`events/${match.params.id}`);
   }
+
+  async componentWillUnmount(){
+    const {firestore, match} = this.props;
+    await firestore.unsetListener(`events/${match.params.id}`);
+  }
+
   render() {
-    const {event, auth} = this.props;
+    const {event, auth, goingToEvent } = this.props;
     const attendees =  event && event.attendees && objectToArray(event.attendees);
     const isHost = event.hostUid === auth.uid;
     /* The some() method executes the function once for each element present in the array:
@@ -54,7 +60,7 @@ class EventDetailedPage extends Component {
     return (
       <Grid>
         <Grid.Column width={10}>        
-          <EventDetailedHeader event={event} isHost={isHost} isGoing={isGoing}/> 
+          <EventDetailedHeader event={event} isHost={isHost} isGoing={isGoing} goingToEvent={goingToEvent}/> 
           <EventDetailedInfo event={event} /> 
           <EventDetailedChat /> 
         </Grid.Column>
@@ -68,4 +74,4 @@ class EventDetailedPage extends Component {
 }
 
 
-export default withFirestore(connect(mapStateToProps)(EventDetailedPage))
+export default withFirestore(connect(mapStateToProps,mapDispatchToProps)(EventDetailedPage))
