@@ -25,7 +25,10 @@ const mapStateToProps = (state, ownProps) => {
     event = state.events.filter( event => event.id === eventId)[0];
   }
   */
-  return {event};
+  return {
+    event: event,
+    auth: state.firebase.auth
+  };
 } 
 
 class EventDetailedPage extends Component {
@@ -40,12 +43,18 @@ class EventDetailedPage extends Component {
     }
   }
   render() {
-    const {event} = this.props;
+    const {event, auth} = this.props;
     const attendees =  event && event.attendees && objectToArray(event.attendees);
+    const isHost = event.hostUid === auth.uid;
+    /* The some() method executes the function once for each element present in the array:
+       If it finds an array element where the function returns a true value, some() returns true 
+       (and does not check the remaining values) Otherwise it returns false. */
+    const isGoing = attendees && attendees.some(attendee => attendee.id === auth.uid)
+
     return (
       <Grid>
         <Grid.Column width={10}>        
-          <EventDetailedHeader event={event} /> 
+          <EventDetailedHeader event={event} isHost={isHost} isGoing={isGoing}/> 
           <EventDetailedInfo event={event} /> 
           <EventDetailedChat /> 
         </Grid.Column>
