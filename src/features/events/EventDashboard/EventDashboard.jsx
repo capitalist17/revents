@@ -4,7 +4,7 @@ import { Grid } from 'semantic-ui-react';
 import EventList from '../EventList/EventList';
 
 import { connect } from 'react-redux'; // using this we can bind this component to the redux store
-import { firestoreConnect } from 'react-redux-firebase'; // Binding to connecto to firebase firestore
+import { firestoreConnect, isLoaded, isEmpty } from 'react-redux-firebase'; // Binding to connecto to firebase firestore
 
 import { deleteEvent } from '../eventActions';
 
@@ -29,8 +29,8 @@ class EventDashboard extends Component {
   }
 
   render() {
-    const {events,loading} = this.props;
-    if (loading) return <LoadingComponent inverted={true} />
+    const {events} = this.props;
+    if (!isLoaded(events) || isEmpty(events)) return <LoadingComponent inverted={true} />
 
     return (
      <Grid>
