@@ -8,33 +8,7 @@ import UserDetailedDescription from './UserDetailedDescription'
 import UserDetailedPhotos from './UserDetailedPhotos'
 import UserDetailedSidebar from './UserDetailedSidebar'
 import UserDetailedEvents from './UserDetailedEvents'
-
-const query = ({auth,userUid}) => {
-  if (userUid !== null) {
-    return [
-      {
-        collection: 'users',
-        doc: userUid,
-        storeAs: 'profile'
-      },
-      {
-        collection: 'users',
-        doc: userUid,
-        subcollections: [{ collection: 'photos' }],
-        storeAs: 'photos'
-      }
-    ];
-  } else {
-    return [
-      {
-        collection: 'users',
-        doc: auth.uid,
-        subcollections: [{collection: 'photos'}],
-        storeAs: 'photos'
-      }
-    ]
-  }
-}
+import { userDetailedQuery } from '../userQueries'
 
 const mapState = (state, ownProps) => {
   let userUid = null;
@@ -56,12 +30,13 @@ const mapState = (state, ownProps) => {
 
 class UserDetailedPage extends Component {
   render() {
-    const {profile, photos} = this.props;
+    const {profile, photos, auth, match} = this.props;
+    const isCurrentUser = auth.uid === match.params.id;
     return (
       <Grid>
         <UserDetailedHeader profile={profile}/>
         <UserDetailedDescription profile={profile}/>
-        <UserDetailedSidebar/>
+        <UserDetailedSidebar isCurrentUser= {isCurrentUser}/>
         {photos && photos.length > 0 &&
         <UserDetailedPhotos photos={photos}/>}
         <UserDetailedEvents/>
@@ -72,5 +47,5 @@ class UserDetailedPage extends Component {
 
 export default compose(
   connect(mapState),
-  firestoreConnect((auth,userUid) => query(auth,userUid)),
+  firestoreConnect((auth,userUid) => userDetailedQuery(auth,userUid)),
 )(UserDetailedPage);
