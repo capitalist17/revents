@@ -1,6 +1,8 @@
 import { toastr } from 'react-redux-toastr';
 import { createNewEvent } from '../../app/common/util/helpers';
 import moment from 'moment'
+// Below gives us the ability to call the firestor API directly rather than going thru getFirestor()
+import firebase from '../../app/config/firebase';
 
 import { DELETE_EVENT, FETCH_EVENTS } from './eventConstants';
 import { asyncActionStart, asyncActionFinish, asyncActionError } from '../async/asyncActions';
@@ -63,6 +65,32 @@ export const createEvent = (event) => {
     }
   };
 
+  export const getEventsForDashboard = () =>
+    async ( dispatch, getState ) => {      
+      let today = new Date(Date.now());
+      const firestore = firebase.firestore();
+      //Get all future events 
+      const eventsQuery =  firestore.collection('events').where('date','>=',today)
+      //console.log(eventsQuery);
+      try {
+        dispatch(asyncActionStart());
+        let querySnap = await eventsQuery.get();
+        console.log(querySnap); // this is a promise
+        let events = [];
+
+        for (let i = 0; i < querySnap.docs.length; i++) {
+          let evt = { ...querySnap.docs[i].data(), id: querySnap.docs[i].id };
+          events.push(evt);
+        }
+        //console.log(events);
+        dispatch({ type: FETCH_EVENTS, payload: { events } });
+        dispatch(asyncActionFinish());
+      } catch (error) {
+        console.log(error);
+        dispatch(asyncActionError());
+      }
+    }
+
   // for deletion the payload <i> </i>s the id of the event
   export const deleteEvent = (eventId) => {
     return {
@@ -73,23 +101,23 @@ export const createEvent = (event) => {
     }
   }
 
-  export const fetchEvents = (events) => {
-    return {
-      type: FETCH_EVENTS,
-      payload: events
-    }
-  }
+  // export const fetchEvents = (events) => {
+    // return {
+    //   type: FETCH_EVENTS,
+    //   payload: events
+    // }
+  // }
 
-  export const loadEvents = () => {
-    return async dispatch => {
-      try {
-        dispatch(asyncActionStart());
-        let events = await fetchSampleData();
-        dispatch(fetchEvents(events));
-        dispatch(asyncActionFinish());
-      } catch (error) {
-        console.log(error);
-        dispatch(asyncActionError());
-      }
-    };
-  };
+  // export const loadEvents = () => {
+  //   return async dispatch => {
+  //     try {
+  //       dispatch(asyncActionStart());
+  //       let events = await fetchSampleData();
+  //       dispatch(fetchEvents(events));
+  //       dispatch(asyncActionFinish());
+  //     } catch (error) {
+  //       console.log(error);
+  //       dispatch(asyncActionError());
+  //     }
+  //   };
+  // };
