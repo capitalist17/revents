@@ -65,17 +65,29 @@ export const createEvent = (event) => {
     }
   };
 
-  export const getEventsForDashboard = () =>
+  export const getEventsForDashboard = (lastEvent) =>
     async ( dispatch, getState ) => {      
       let today = new Date(Date.now());
       const firestore = firebase.firestore();
       //Get all future events 
-      const eventsQuery =  firestore.collection('events').where('date','>=',today)
+      const eventsRef =  firestore.collection('events')
       //console.log(eventsQuery);
       try {
         dispatch(asyncActionStart());
-        let querySnap = await eventsQuery.get();
-        console.log(querySnap); // this is a promise
+        let startAfter = lastEvent && (await firestore.collection('events').doc(lastEvent.id).get());
+        let query;
+
+        lastEvent
+          ? (query = eventsRef.where('date', '>=', today).orderBy('date').startAfter(startAfter).limit(2)) 
+          : (query = eventsRef.where('date', '>=', today).orderBy('date').limit(2));
+        
+        let querySnap = await query.get();
+
+        if (querySnap.docs.length === 0) {
+          dispatch(asyncActionFinish());
+          return querySnap;
+        }
+
         let events = [];
 
         for (let i = 0; i < querySnap.docs.length; i++) {
@@ -85,6 +97,7 @@ export const createEvent = (event) => {
         //console.log(events);
         dispatch({ type: FETCH_EVENTS, payload: { events } });
         dispatch(asyncActionFinish());
+        return querySnap;
       } catch (error) {
         console.log(error);
         dispatch(asyncActionError());
@@ -100,13 +113,6 @@ export const createEvent = (event) => {
       }
     }
   }
-
-  // export const fetchEvents = (events) => {
-    // return {
-    //   type: FETCH_EVENTS,
-    //   payload: events
-    // }
-  // }
 
   // export const loadEvents = () => {
   //   return async dispatch => {

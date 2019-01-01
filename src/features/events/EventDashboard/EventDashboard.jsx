@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Grid } from 'semantic-ui-react';
+import { Grid, Button } from 'semantic-ui-react';
 
 import EventList from '../EventList/EventList';
 
@@ -22,9 +22,37 @@ const mapDispatchToProps = {
 }
 
 class EventDashboard extends Component {
-  componentDidMount(){
-    this.props.getEventsForDashboard();
+  state = {
+    moreEvents: false,
+    loadingInitial: true
+  };
+
+  async componentDidMount(){
+    // next will contain the querySnap returned from eventAction (getEventsForDashboard)
+    let next = await this.props.getEventsForDashboard();
+
+    console.log(next);
+
+    if (next && next.docs && next.docs.length > 1) {
+      this.setState({
+        moreEvents: true,
+        loadingInitial: false
+      });
+    }
   }
+
+  getNextEvents = async () => {
+    const { events } = this.props;
+    let lastEvent = events && events[events.length - 1];
+    console.log(lastEvent);
+    let next = await this.props.getEventsForDashboard(lastEvent);
+    console.log(next);
+    if (next && next.docs && next.docs.length <= 1) {
+      this.setState({
+        moreEvents: false
+      });
+    }
+  };
 
   handleDeleteEvent = (eventId) => () => {
     this.props.deleteEvent(eventId);
@@ -37,8 +65,9 @@ class EventDashboard extends Component {
     return (
      <Grid>
          <Grid.Column width={10}> 
-            <EventList deleteEvent={this.handleDeleteEvent} 
-                       events = {events}/>
+            <EventList deleteEvent={this.handleDeleteEvent} events = {events}/>
+            <Button onClick={this.getNextEvents} disbled={!this.state.moreEvents}
+              content='More' color='green' floated='right' />
          </Grid.Column>
          <Grid.Column width={6}> 
             <EventActivity />
