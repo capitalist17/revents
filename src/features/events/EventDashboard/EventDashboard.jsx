@@ -24,7 +24,8 @@ const mapDispatchToProps = {
 class EventDashboard extends Component {
   state = {
     moreEvents: false,
-    loadingInitial: true
+    loadingInitial: true,
+    loadedEvents: []
   };
 
   async componentDidMount(){
@@ -37,6 +38,14 @@ class EventDashboard extends Component {
       this.setState({
         moreEvents: true,
         loadingInitial: false
+      });
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.events !== nextProps.events) {
+      this.setState({
+        loadedEvents: [...this.state.loadedEvents, ...nextProps.events]
       });
     }
   }
@@ -60,13 +69,13 @@ class EventDashboard extends Component {
 
   render() {
     const {events, loading} = this.props;
-    if (loading) return <LoadingComponent inverted={true} />
+    if (this.state.loadingInitial) return <LoadingComponent inverted={true} />
 
     return (
      <Grid>
          <Grid.Column width={10}> 
-            <EventList deleteEvent={this.handleDeleteEvent} events = {events}/>
-            <Button onClick={this.getNextEvents} disbled={!this.state.moreEvents}
+            <EventList deleteEvent={this.handleDeleteEvent} events = {this.state.loadedEvents}/>
+            <Button onClick={this.getNextEvents} disbled={!this.state.moreEvents} loading={loading}
               content='More' color='green' floated='right' />
          </Grid.Column>
          <Grid.Column width={6}> 
