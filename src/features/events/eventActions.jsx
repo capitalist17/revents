@@ -104,11 +104,20 @@ export const createEvent = (event) => {
       }
     }
 
-  export const addEventComment = (eventId, comment) => 
+  export const addEventComment = (eventId, values) => 
     async (dispatch, getState, {getFirebase}) => {
       const firebase = getFirebase();    
-      try {
-        await firebase.push(`event_chat/${eventId}`, comment)
+      const profile = getState().firebase.profile;
+      const user = firebase.auth().currentUser;
+      let newComment = {
+        displayName: profile.displayName,
+        photoURL: profile.photoURL || '/assets/user.png',
+        uid: user.uid,
+        text: values.comment,
+        date: Date.now()
+      }
+      try {                
+        await firebase.push(`event_chat/${eventId}`, newComment)
       } catch (error) {
         console.log(error);
         toastr.error('Oops', 'Problem adding comment')
