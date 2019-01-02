@@ -3,6 +3,7 @@ import cuid from 'cuid';
 import { toastr } from 'react-redux-toastr';
 import { asyncActionError, asyncActionStart, asyncActionFinish } from '../async/asyncActions';
 import firebase from '../../app/config/firebase';
+import { FETCH_EVENTS } from '../event/eventConstants'
 
 export const updateProfile = (user) => 
     async (dispatch, getState, {getFirebase}) => {
@@ -190,11 +191,12 @@ async (dispatch, getState) => {
         let querySnap = await query.get();
         let events = [];
 
-        for (let i = 0; i < querySnap.docs.length; i++) {
-          let evt = { ...querySnap.docs[i].data(), id: querySnap.docs[i].id };
-          events.push(evt);
+        for (let i=0; i<querySnap.docs.length; i++) {
+            let evt = await firestore.collection('events').doc(querySnap.docs[i].data().eventId).get();
+            events.push({...evt.data(), id: evt.id})
         }
-        console.log(querySnap);
+      
+        dispatch({type: FETCH_EVENTS, payload: {events}})
         dispatch(asyncActionFinish());
     } catch (error) {
         console.log(error);
