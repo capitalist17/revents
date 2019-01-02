@@ -104,15 +104,17 @@ export const createEvent = (event) => {
       }
     }
 
-  // for deletion the payload <i> </i>s the id of the event
-  export const deleteEvent = (eventId) => {
-    return {
-      type: DELETE_EVENT,
-      payload: {
-        eventId
+  export const addEventComment = (eventId, comment) => 
+    async (dispatch, getState, {getFirebase}) => {
+      const firebase = getFirebase();    
+      try {
+        await firebase.push(`event_chat/${eventId}`, comment)
+      } catch (error) {
+        console.log(error);
+        toastr.error('Oops', 'Problem adding comment')
       }
     }
-  }
+  
 
   // export const loadEvents = () => {
   //   return async dispatch => {

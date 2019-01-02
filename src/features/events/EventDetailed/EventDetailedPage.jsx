@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Grid } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { withFirestore } from 'react-redux-firebase';
+import { compose } from 'redux';
+import { withFirestore, firebaseConnect, isEmpty  } from 'react-redux-firebase';
 
 import EventDetailedChat from './EventDetailedChat';
 import EventDetailedHeader from './EventDetailedHeader';
@@ -10,6 +11,7 @@ import EventDetailedSidebar from './EventDetailedSidebar';
 import { objectToArray } from '../../../app/common/util/helpers';
 
 import { goingToEvent, cancelGoingToEvent } from '../../user/userActions';
+import { addEventComment } from '../eventActions';
 
 const mapStateToProps = (state, ownProps) => {
   //const eventId=ownProps.match.params.id
@@ -32,7 +34,7 @@ const mapStateToProps = (state, ownProps) => {
 } 
 
 const mapDispatchToProps = {
-  goingToEvent, cancelGoingToEvent
+  goingToEvent, cancelGoingToEvent, addEventComment
 }
 
 class EventDetailedPage extends Component {
@@ -48,7 +50,7 @@ class EventDetailedPage extends Component {
   }
 
   render() {
-    const {event, auth, goingToEvent, cancelGoingToEvent } = this.props;
+    const {event, auth, goingToEvent, cancelGoingToEvent, addEventComment } = this.props;
     const attendees =  event && event.attendees && objectToArray(event.attendees);
     const isHost = event.hostUid === auth.uid;
     /* The some() method executes the function once for each element present in the array:
@@ -62,7 +64,7 @@ class EventDetailedPage extends Component {
           <EventDetailedHeader event={event} isHost={isHost} isGoing={isGoing} 
                               goingToEvent={goingToEvent} cancelGoingToEvent= {cancelGoingToEvent}/> 
           <EventDetailedInfo event={event} /> 
-          <EventDetailedChat /> 
+          <EventDetailedChat addEventComment={addEventComment} eventId={event.id}/> 
         </Grid.Column>
 
         <Grid.Column width={6}>
@@ -74,4 +76,10 @@ class EventDetailedPage extends Component {
 }
 
 
-export default withFirestore(connect(mapStateToProps,mapDispatchToProps)(EventDetailedPage))
+// export default withFirestore(connect(mapStateToProps,mapDispatchToProps)(EventDetailedPage))
+export default compose(
+  withFirestore,
+  connect(mapStateToProps, mapDispatchToProps),
+  firebaseConnect(props => [`event_chat/${props.match.params.id}`]) //depends on props.see in browser inspect
+)(EventDetailedPage);
+

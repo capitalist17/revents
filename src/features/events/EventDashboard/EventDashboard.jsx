@@ -6,7 +6,7 @@ import EventList from '../EventList/EventList';
 import { connect } from 'react-redux'; // using this we can bind this component to the redux store
 import { firestoreConnect, isLoaded, isEmpty } from 'react-redux-firebase'; // Binding to connecto to firebase firestore
 
-import { deleteEvent, getEventsForDashboard } from '../eventActions';
+import { getEventsForDashboard } from '../eventActions';
 
 import EventActivity from '../EventActivity/EventActivity'
 import LoadingComponent from '../../../app/layout/LoadingComponent';
@@ -18,7 +18,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = {
-  deleteEvent, getEventsForDashboard
+  getEventsForDashboard
 }
 
 class EventDashboard extends Component {
