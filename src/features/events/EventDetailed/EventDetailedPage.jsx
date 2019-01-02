@@ -8,7 +8,7 @@ import EventDetailedChat from './EventDetailedChat';
 import EventDetailedHeader from './EventDetailedHeader';
 import EventDetailedInfo from './EventDetailedInfo';
 import EventDetailedSidebar from './EventDetailedSidebar';
-import { objectToArray } from '../../../app/common/util/helpers';
+import { objectToArray, createDataTree } from '../../../app/common/util/helpers';
 
 import { goingToEvent, cancelGoingToEvent } from '../../user/userActions';
 import { addEventComment } from '../eventActions';
@@ -59,6 +59,8 @@ class EventDetailedPage extends Component {
        If it finds an array element where the function returns a true value, some() returns true 
        (and does not check the remaining values) Otherwise it returns false. */
     const isGoing = attendees && attendees.some(attendee => attendee.id === auth.uid)
+    // create a hierarchical data structure using createDataTree
+    const chatTree = !isEmpty(eventChat) && createDataTree(eventChat) 
 
     return (
       <Grid>
@@ -66,7 +68,7 @@ class EventDetailedPage extends Component {
           <EventDetailedHeader event={event} isHost={isHost} isGoing={isGoing} 
                               goingToEvent={goingToEvent} cancelGoingToEvent= {cancelGoingToEvent}/> 
           <EventDetailedInfo event={event} /> 
-          <EventDetailedChat eventChat={eventChat} addEventComment={addEventComment} eventId={event.id}/> 
+          <EventDetailedChat eventChat={chatTree} addEventComment={addEventComment} eventId={event.id}/> 
         </Grid.Column>
 
         <Grid.Column width={6}>
