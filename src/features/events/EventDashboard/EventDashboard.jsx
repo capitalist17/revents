@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Grid, Button } from 'semantic-ui-react';
+import { Grid, Button, Loader } from 'semantic-ui-react';
 
 import EventList from '../EventList/EventList';
 
@@ -63,24 +63,25 @@ class EventDashboard extends Component {
     }
   };
 
-  handleDeleteEvent = (eventId) => () => {
-    this.props.deleteEvent(eventId);
-  }
-
   render() {
-    const {events, loading} = this.props;
+    const {loading} = this.props;
+    const { moreEvents, loadedEvents } = this.state;
     if (this.state.loadingInitial) return <LoadingComponent inverted={true} />
 
     return (
      <Grid>
-         <Grid.Column width={10}> 
-            <EventList deleteEvent={this.handleDeleteEvent} events = {this.state.loadedEvents}/>
-            <Button onClick={this.getNextEvents} disbled={!this.state.moreEvents} loading={loading}
-              content='More' color='green' floated='right' />
-         </Grid.Column>
-         <Grid.Column width={6}> 
-            <EventActivity />
-         </Grid.Column>
+        <Grid.Column width={10}>
+          <EventList loading={loading} moreEvents={moreEvents}
+            events={loadedEvents} getNextEvents={this.getNextEvents} />
+          {/* <Button onClick={this.getNextEvents} disbled={!this.state.moreEvents} 
+              loading={loading} content='More' color='green' floated='right' /> */}
+        </Grid.Column>
+        <Grid.Column width={6}>
+          <EventActivity />
+        </Grid.Column>
+        <Grid.Column width={10}>
+          <Loader active={loading} />
+        </Grid.Column>
      </Grid>
     )
   }
