@@ -8,18 +8,27 @@ import distanceInWords from 'date-fns/distance_in_words';
 
 class EventDetailedChat extends Component {
   state = {
-    showReplyForm: false
+    showReplyForm: false,
+    selectedCommentId: null
   };
 
   handleOpenReplyForm = id => () => {
     this.setState({
-      showReplyForm: true
+      showReplyForm: true,
+      selectedCommentId: id
+    });
+  };
+
+  handleCloseReplyForm = () => {
+    this.setState({
+      selectedCommentId: null,
+      showReplyForm: false
     });
   };
 
   render() {
     const {eventChat,addEventComment, eventId} = this.props;
-    const { showReplyForm } = this.state;
+    const { showReplyForm, selectedCommentId } = this.state;
     return (
       <div>
         <Segment textAlign="center" attached="top" inverted color="teal" 
@@ -42,10 +51,11 @@ class EventDetailedChat extends Component {
               <Comment.Text>{comment.text}</Comment.Text>
               <Comment.Actions>
                 <Comment.Action onClick={this.handleOpenReplyForm(comment.id)}>Reply</Comment.Action>
-                  {showReplyForm && (
-                      <EventDetailedChatForm
+                  {showReplyForm && selectedCommentId === comment.id && (
+                      <EventDetailedChatForm form={`reply_${comment.id}`}
                         addEventComment={addEventComment}
                         eventId={eventId}
+                        closeForm={this.handleCloseReplyForm}
                       />
                     )}
               </Comment.Actions>
@@ -54,7 +64,7 @@ class EventDetailedChat extends Component {
             ))}     
           </Comment.Group>
           
-          <EventDetailedChatForm form={'eventChat'} 
+          <EventDetailedChatForm form={'firstComment'}  
           addEventComment={addEventComment} eventId={eventId} />
           
         </Segment>
