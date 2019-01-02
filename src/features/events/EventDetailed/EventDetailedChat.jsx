@@ -24,7 +24,7 @@ const EventDetailedChat = ({eventChat,addEventComment, eventId}) => {
             <Comment.Metadata>
               <div>{distanceInWords(comment.date, Date.now())} ago</div>
             </Comment.Metadata>
-            <Comment.Text>{<comment className="text"></comment>}</Comment.Text>
+            <Comment.Text>{comment.text}</Comment.Text>
             <Comment.Actions>
               <Comment.Action>Reply</Comment.Action>
             </Comment.Actions>
