@@ -1,10 +1,12 @@
 import React from 'react';
 import { Card, Grid, Header, Image, Menu, Segment } from 'semantic-ui-react';
+import { Link } from 'react-router-dom'
+import format from 'date-fns/format'
 
-const UserDeteiledEvents = () => {
+const UserDeteiledEvents = ({events, eventsLoading}) => {
   return (
     <Grid.Column width={12}>
-      <Segment attached>
+      <Segment attached loading={eventsLoading}>
         <Header icon="calendar" content="Events" />
         <Menu secondary pointing>
           <Menu.Item name="All Events" active />
@@ -14,25 +16,18 @@ const UserDeteiledEvents = () => {
         </Menu>
 
         <Card.Group itemsPerRow={5}>
-          <Card>
-            <Image src={'/assets/categoryImages/drinks.jpg'} />
+        {events && events.map(event => (
+          <Card as={Link} to={`/event/${event.id}`} key={event.id}>
+            <Image src={`/assets/categoryImages/${event.category}.jpg`} />
             <Card.Content>
-              <Card.Header textAlign="center">Event Title</Card.Header>
+              <Card.Header textAlign="center">{event.title}</Card.Header>
               <Card.Meta textAlign="center">
-                28th March 2018 at 10:00 PM
+                <div>{format(event.date.toDate(), 'DD MMM YYYY')}</div>
+                <div>{format(event.date.toDate(), 'h:mm A')}</div>
               </Card.Meta>
             </Card.Content>
           </Card>
-
-          <Card>
-            <Image src={'/assets/categoryImages/drinks.jpg'} />
-            <Card.Content>
-              <Card.Header textAlign="center">Event Title</Card.Header>
-              <Card.Meta textAlign="center">
-                28th March 2018 at 10:00 PM
-              </Card.Meta>
-            </Card.Content>
-          </Card>
+        ))}
         </Card.Group>
       </Segment>
     </Grid.Column>

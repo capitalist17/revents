@@ -3,7 +3,7 @@ import cuid from 'cuid';
 import { toastr } from 'react-redux-toastr';
 import { asyncActionError, asyncActionStart, asyncActionFinish } from '../async/asyncActions';
 import firebase from '../../app/config/firebase';
-import { FETCH_EVENTS } from '../event/eventConstants'
+import { FETCH_EVENTS } from '../events/eventConstants'
 
 export const updateProfile = (user) => 
     async (dispatch, getState, {getFirebase}) => {
