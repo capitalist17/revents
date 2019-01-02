@@ -52,9 +52,9 @@ class EventDetailedChat extends Component {
               <Comment.Actions>
                 <Comment.Action onClick={this.handleOpenReplyForm(comment.id)}>Reply</Comment.Action>
                   {showReplyForm && selectedCommentId === comment.id && (
-                      <EventDetailedChatForm form={`reply_${comment.id}`}
-                        addEventComment={addEventComment}
-                        eventId={eventId}
+                      <EventDetailedChatForm 
+                        form={`reply_${comment.id}`} parentId={comment.id}
+                        addEventComment={addEventComment} eventId={eventId}
                         closeForm={this.handleCloseReplyForm}
                       />
                     )}
@@ -64,8 +64,8 @@ class EventDetailedChat extends Component {
             ))}     
           </Comment.Group>
           
-          <EventDetailedChatForm form={'firstComment'}  
-          addEventComment={addEventComment} eventId={eventId} />
+          <EventDetailedChatForm form={'firstComment'}  parentId={0}
+                addEventComment={addEventComment} eventId={eventId} />
           
         </Segment>
       </div>
