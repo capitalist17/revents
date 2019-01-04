@@ -4,9 +4,9 @@ import moment from 'moment'
 // Below gives us the ability to call the firestor API directly rather than going thru getFirestor()
 import firebase from '../../app/config/firebase';
 
-import { DELETE_EVENT, FETCH_EVENTS } from './eventConstants';
+import { FETCH_EVENTS } from './eventConstants';
 import { asyncActionStart, asyncActionFinish, asyncActionError } from '../async/asyncActions';
-import { fetchSampleData } from '../../app/data/mockApi';
+//import { fetchSampleData } from '../../app/data/mockApi';
 import compareAsc from 'date-fns/compare_asc';
 
 export const createEvent = (event) => {
