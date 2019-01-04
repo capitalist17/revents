@@ -137,7 +137,7 @@ class PhotosPage extends Component {
                         <Image style={{ minHeight: '200px', minWidth: '200px' }}
                                 src={this.state.cropResult} />
                         <Button.Group>
-                          <Button onClick={this.uploadImage} loading={loading}
+                          <Button loading={loading} onClick={this.uploadImage} 
                                   style={{ width: '100px' }} positive icon="check" />
                           {/* Disable the cancel button when the image is loading */}
                           <Button onClick={this.cancelCrop} disabled={loading}
@@ -162,7 +162,8 @@ class PhotosPage extends Component {
                         <Card key={photo.id}>
                           <Image src={photo.url} />
                           <div className="ui two buttons">
-                            <Button onClick={this.handleSetMainPhoto(photo)} basic color='green'>Main</Button>
+                            <Button onClick={this.handleSetMainPhoto(photo)} loading={loading}
+                                    basic color='green'>Main</Button>
                             <Button onClick={this.handlePhotoDelete(photo)} basic icon='trash' color='red' />
                           </div>
                         </Card>
