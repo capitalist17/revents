@@ -10,7 +10,7 @@ import UserDetailedSidebar from './UserDetailedSidebar'
 import UserDetailedEvents from './UserDetailedEvents'
 import { userDetailedQuery } from '../userQueries'
 import LoadingComponent from '../../../app/layout/LoadingComponent';
-import { getUserEvents, followUser } from '../userActions';
+import { getUserEvents, followUser, unfollowUser } from '../userActions';
 
 const mapState = (state, ownProps) => {
   let userUid = null;
@@ -35,7 +35,7 @@ const mapState = (state, ownProps) => {
 }
 
 const actions = {
-  getUserEvents, followUser
+  getUserEvents, followUser, unfollowUser
 }
 class UserDetailedPage extends Component {
   async componentDidMount(){
@@ -49,7 +49,7 @@ class UserDetailedPage extends Component {
 
   render() {
     const {profile, photos, auth, match, requesting, events, eventsLoading, 
-      followUser, following} = this.props;
+      followUser, following, unfollowUser} = this.props;
     const isCurrentUser = auth.uid === match.params.id;
 
     const isFollowing = !isEmpty(following);
@@ -63,7 +63,7 @@ class UserDetailedPage extends Component {
         <UserDetailedHeader profile={profile}/>
         <UserDetailedDescription profile={profile}/>
         <UserDetailedSidebar isCurrentUser= {isCurrentUser} isFollowing={isFollowing}
-                  followUser={followUser} profile={profile}/>
+                  unfollowUser={unfollowUser} followUser={followUser} profile={profile}/>
         {photos && photos.length > 0 &&
         <UserDetailedPhotos photos={photos}/>}
         <UserDetailedEvents events={events} eventsLoading={eventsLoading} changeTab={this.changeTab}/>
