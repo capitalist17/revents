@@ -29,6 +29,7 @@ const mapStateToProps = (state, ownProps) => {
   */
   return {
     event: event,
+    loading: state.async.loading,
     auth: state.firebase.auth,
     eventChat: !isEmpty(state.firebase.data.event_chat) &&
           objectToArray(state.firebase.data.event_chat[ownProps.match.params.id])
@@ -52,7 +53,7 @@ class EventDetailedPage extends Component {
   }
 
   render() {
-    const {event, auth, goingToEvent, cancelGoingToEvent, addEventComment, eventChat} = this.props;
+    const {event,auth,goingToEvent,cancelGoingToEvent,addEventComment,eventChat,loading} = this.props;
     const attendees =  event && event.attendees && objectToArray(event.attendees);
     const isHost = event.hostUid === auth.uid;
     /* The some() method executes the function once for each element present in the array:
@@ -65,7 +66,7 @@ class EventDetailedPage extends Component {
     return (
       <Grid>
         <Grid.Column width={10}>        
-          <EventDetailedHeader event={event} isHost={isHost} isGoing={isGoing} 
+          <EventDetailedHeader event={event} isHost={isHost} isGoing={isGoing} loading = {loading}
                               goingToEvent={goingToEvent} cancelGoingToEvent= {cancelGoingToEvent}/> 
           <EventDetailedInfo event={event} /> 
           <EventDetailedChat eventChat={chatTree} addEventComment={addEventComment} eventId={event.id}/> 

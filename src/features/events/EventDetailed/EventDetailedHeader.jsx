@@ -3,7 +3,7 @@ import format from 'date-fns/format';
 import { Segment, Image, Item, Header, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
-const eventImageStyle = {
+const eventImageStyle = { 
     filter: 'brightness(30%)'
 };
 
@@ -16,7 +16,7 @@ const eventImageTextStyle = {
     color: 'white'
 };
 
-const EventDetailedHeader = ({event, isHost, isGoing, goingToEvent,cancelGoingToEvent }) => {
+const EventDetailedHeader = ({event,isHost,isGoing,goingToEvent,cancelGoingToEvent,loading }) => {
   let eventDate;
   if (event.date){
     eventDate = event.date.toDate()
@@ -47,7 +47,9 @@ const EventDetailedHeader = ({event, isHost, isGoing, goingToEvent,cancelGoingTo
                 {isGoing ? (
                   <Button onClick={() => cancelGoingToEvent(event)}>Cancel My Place</Button>
                 ) : (
-                  <Button onClick={() => goingToEvent(event)} color="teal">JOIN THIS EVENT</Button>
+                  <Button loading={loading} onClick={() => goingToEvent(event)} color="teal">
+                      JOIN THIS EVENT
+                  </Button>
                 )}
               </div>
             )}
