@@ -6,7 +6,7 @@ import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-au
 import GoogleMapReact from 'google-map-react';
 
 import { incrementCounter, decrementCounter, 
-         incrementAsync, decrementAsync } from './testActions'
+         incrementAsync, decrementAsync, testPermissions } from './testActions'
 import { openModal } from '../modals/modalActions';
 
 const mapStateToProps = (state) => ({
@@ -19,7 +19,8 @@ const mapDispatchToProps = {
   decrementCounter,  
   openModal,
   incrementAsync, 
-  decrementAsync
+  decrementAsync,
+  testPermissions
 }
 
 const Marker = () => <Icon name='marker' size='big' color='red' />
@@ -56,7 +57,7 @@ class TestComponent extends Component {
       onChange: this.onChange,
     }
     const {incrementCounter, decrementCounter, data, openModal, 
-            incrementAsync, decrementAsync, loading } = this.props;
+            incrementAsync, decrementAsync, loading, testPermissions } = this.props;
     return (
       <div>
         <Script 
@@ -70,6 +71,7 @@ class TestComponent extends Component {
         <Button onClick={() => openModal('LoginModal',{somedata:43})} color='teal' content='Open Model' />
         <Button onClick={incrementAsync} loading = {loading} color='green' content='Increment-Async' />
         <Button onClick={decrementAsync} loading = {loading} color='red' content='Decrement-Async' />
+        <Button onClick={testPermissions} color='orange' content='Test Permission' />
         <br/> <br/> <br/> <br/>
         <form onSubmit={this.handleFormSubmit}>
           {this.state.scriptLoaded && <PlacesAutocomplete inputProps={inputProps} /> }          
