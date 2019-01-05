@@ -26,14 +26,20 @@ class UnauthModal extends Component {
                     <Modal.Description>
                         <p>Please either login or register to see this page</p>
                         <Button.Group widths={4}>
-                            <Button fluid color='teal' onClick={() => openModal("LoginModal")}>Login</Button>
+                            <Button fluid color='teal' onClick={() => openModal("LoginModal")}>
+                                Login
+                            </Button>
                             <Button.Or />
-                            <Button fluid positive onClick={() => openModal("RegisterModal")}>Register</Button>
+                            <Button fluid positive onClick={() => openModal("RegisterModal")}>
+                                Register
+                            </Button>
                         </Button.Group>
                         <Divider/>
                         <div style={{textAlign: 'center'}}>
                             <p>Or click cancel to continue as a guest</p>
-                            <Button onClick={this.handleCloseModal}>Cancel</Button>
+                            <Button onClick={this.handleCloseModal}>
+                                Cancel
+                            </Button>
                         </div>
                     </Modal.Description>
                 </Modal.Content>
