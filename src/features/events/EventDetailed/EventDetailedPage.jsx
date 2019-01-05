@@ -12,6 +12,7 @@ import { objectToArray, createDataTree } from '../../../app/common/util/helpers'
 
 import { goingToEvent, cancelGoingToEvent } from '../../user/userActions';
 import { addEventComment } from '../eventActions';
+import { openModal } from '../../modals/modalActions';
 
 const mapStateToProps = (state, ownProps) => {
   //const eventId=ownProps.match.params.id
@@ -37,7 +38,7 @@ const mapStateToProps = (state, ownProps) => {
 } 
 
 const mapDispatchToProps = {
-  goingToEvent, cancelGoingToEvent, addEventComment
+  goingToEvent, cancelGoingToEvent, addEventComment, openModal
 }
 
 class EventDetailedPage extends Component {
@@ -53,7 +54,8 @@ class EventDetailedPage extends Component {
   }
 
   render() {
-    const {event,auth,goingToEvent,cancelGoingToEvent,addEventComment,eventChat,loading} = this.props;
+    const {event,auth,goingToEvent,cancelGoingToEvent,
+          addEventComment,eventChat,loading, openModal } = this.props;
     const attendees =  event && event.attendees && objectToArray(event.attendees);
     const isHost = event.hostUid === auth.uid;
     /* The some() method executes the function once for each element present in the array:
@@ -62,15 +64,19 @@ class EventDetailedPage extends Component {
     const isGoing = attendees && attendees.some(attendee => attendee.id === auth.uid)
     // create a hierarchical data structure using createDataTree
     const chatTree = !isEmpty(eventChat) && createDataTree(eventChat) 
+    const authenticated = auth.isLoaded && !auth.isEmpty;
 
     return (
       <Grid>
         <Grid.Column width={10}>        
           <EventDetailedHeader event={event} isHost={isHost} isGoing={isGoing} loading = {loading}
-                              goingToEvent={goingToEvent} cancelGoingToEvent= {cancelGoingToEvent}/> 
+                              goingToEvent={goingToEvent} cancelGoingToEvent= {cancelGoingToEvent}
+                              authenticated= {authenticated} openModal={openModal} /> 
           <EventDetailedInfo event={event} /> 
+          { authenticated && 
           <EventDetailedChat eventChat={chatTree} addEventComment={addEventComment} eventId={event.id}/> 
-        </Grid.Column>
+          }
+          </Grid.Column>
 
         <Grid.Column width={6}>
           <EventDetailedSidebar attendees={attendees} />
