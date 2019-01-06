@@ -12,6 +12,7 @@ import NavBar from '../../features/nav/NavBar/NavBar';
 import TestComponent from '../../features/testarea/TestComponent';
 import ModalManager from '../../features/modals/ModalManager';
 import { UserIsAuthenticated } from '../../features/auth/authWrapper';
+import NotFound from './NotFound';
 
 class App extends Component {
   render() {
@@ -36,6 +37,7 @@ class App extends Component {
                         <Route path='/profile/:id' component={UserIsAuthenticated(UserDetailedPage)} />
                         <Route path='/settings' component={UserIsAuthenticated(SettingsDashboard)} />
                         <Route path='/createEvent' component={UserIsAuthenticated(EventForm)} />        
+                        <Route path='/error' component={NotFound} />        
                       </Switch>  
                     </Container>
                   </div> )
