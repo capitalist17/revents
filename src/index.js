@@ -32,4 +32,5 @@ store.firebaseAuthIsReady.then(() => {
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: http://bit.ly/CRA-PWA
-serviceWorker.unregister(); 
+// serviceWorker.unregister(); // this is how it should be in dev env
+serviceWorker.register(); // this is how it should be in prod env
