@@ -48,7 +48,7 @@ class EventDetailedPage extends Component {
   state = {
     initialLoading: true
   }
-  
+
   async componentDidMount(){
     const {firestore, match} = this.props;
     
@@ -71,7 +71,10 @@ class EventDetailedPage extends Component {
   render() {
     const {event,auth,goingToEvent,cancelGoingToEvent,addEventComment,
           eventChat,loading, openModal, requesting, match } = this.props;
-    const attendees =  event && event.attendees && objectToArray(event.attendees);
+    const attendees =  event && event.attendees 
+                      && objectToArray(event.attendees).sort(function(a,b){ 
+                                                                return a.joinDate - b.joinDate;
+                                                              });
     const isHost = event.hostUid === auth.uid;
     /* The some() method executes the function once for each element present in the array:
        If it finds an array element where the function returns a true value, some() returns true 
@@ -109,6 +112,7 @@ class EventDetailedPage extends Component {
 export default compose(
   withFirestore,
   connect(mapStateToProps, mapDispatchToProps),
+  // check if the user is authenticated
   firebaseConnect(props => [`event_chat/${props.match.params.id}`]) //depends on props.see in browser inspect
 )(EventDetailedPage);
 

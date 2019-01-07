@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import { Grid, Button, Loader } from 'semantic-ui-react';
+import { Grid, Loader } from 'semantic-ui-react';
 
 import EventList from '../EventList/EventList';
 
 import { connect } from 'react-redux'; // using this we can bind this component to the redux store
-import { firestoreConnect, isLoaded, isEmpty } from 'react-redux-firebase'; // Binding to connecto to firebase firestore
+import { firestoreConnect} from 'react-redux-firebase'; // Binding to connecto to firebase firestore
 
 import { getEventsForDashboard } from '../eventActions';
 
