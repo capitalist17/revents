@@ -1,0 +1,26 @@
+[debug] [2019-01-07T10:42:50.386Z] ----------------------------------------------------------------------
+[debug] [2019-01-07T10:42:50.396Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\asn\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2019-01-07T10:42:50.397Z] CLI Version:   6.2.2
+[debug] [2019-01-07T10:42:50.397Z] Platform:      win32
+[debug] [2019-01-07T10:42:50.397Z] Node Version:  v8.12.0
+[debug] [2019-01-07T10:42:50.399Z] Time:          Mon Jan 07 2019 16:12:50 GMT+0530 (India Standard Time)
+[debug] [2019-01-07T10:42:50.399Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-01-07T10:42:50.458Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-01-07T10:42:50.459Z] > authorizing via signed-in user
+[debug] [2019-01-07T10:42:50.459Z] [iam] checking project revents-226204 for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2019-01-07T10:42:50.462Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2019-01-07T10:42:50.463Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2019-01-07T10:42:50.897Z] <<< HTTP RESPONSE 200
+[debug] [2019-01-07T10:42:50.907Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/revents-226204:testIamPermissions  
+
+[debug] [2019-01-07T10:42:53.451Z] <<< HTTP RESPONSE 200
+[debug] [2019-01-07T10:42:53.455Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/revents-226204  
+ 
+[debug] [2019-01-07T10:42:53.953Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'revents-226204'...
+[info] 
+[info] i  deploying functions, hosting
+[info] Running command: npm --prefix "%RESOURCE_DIR%" run lint
